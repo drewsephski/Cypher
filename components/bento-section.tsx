@@ -1,8 +1,8 @@
 'use client';
 
 import { SectionHeader } from '@/components/ui/section-header';
-import { FirstBentoAnimation } from '@/components/first-bento-animation';
-import { SecondBentoAnimation } from '@/components/second-bento-animation';
+import FirstBentoAnimation from '@/components/first-bento-animation';
+import SecondBentoAnimation from '@/components/second-bento-animation';
 import { ThirdBentoAnimation } from '@/components/third-bento-animation';
 export function BentoSection() {
   const bentoItems = [
