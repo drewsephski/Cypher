@@ -1,5 +1,6 @@
-import { streamText } from "ai"
+import { streamText, tool } from "ai"
 import { google } from "@ai-sdk/google"
+import { openai } from "@ai-sdk/openai"
 import { browseTool } from "@/lib/tools/browseTool"
 
 // Handle analysis requests for contextual documentation analysis
@@ -8,7 +9,7 @@ async function handleAnalysisRequest(messages: any[]) {
     const analysisPrompt = messages[0]?.content || ''
     
     const result = await streamText({
-      model: google("gemini-2.5-flash"),
+      model: google("gemini-2.0-flash-lite"),
       messages: [
         {
           role: "system",
@@ -124,9 +125,19 @@ export async function POST(req: Request) {
       }
     }
 
-    // Enhanced system prompt with documentation awareness
-    const systemPrompt = documentationContext 
-      ? `You are a React component generator specialized in creating beautiful components using Origin UI design patterns and Tailwind CSS.
+    // Enhanced system prompt with tool calling support and documentation awareness
+    const systemPrompt = documentationContext
+      ? `You are an advanced AI assistant with tool calling capabilities for enhanced interactions.
+
+Available tools:
+- web_search: Search the web for current information
+- browse_url: Analyze specific URLs and extract documentation
+- calculate: Perform mathematical calculations
+
+Use these tools when users ask questions that require:
+- Current information (use web_search)
+- Analysis of specific websites or APIs (use browse_url)
+- Mathematical computations (use calculate)
 
 📚 **DOCUMENTATION CONTEXT:**
 The user has provided URLs for API documentation. Use this context to create components that integrate with these APIs:
@@ -186,7 +197,7 @@ EXAMPLE PATTERNS:
 
 **MOCK DATA EXAMPLE:**
 Instead of: fetch('/api/plans')
-Use: 
+Use:
 \`\`\`javascript
 const [plans, setPlans] = useState([]);
 const [loading, setLoading] = useState(false);
@@ -253,7 +264,7 @@ For pricing cards, buttons, modals, forms - create modern, clean designs with:
 Remember: Only return the component code with window.default export, nothing else!`
 
     const result = await streamText({
-      model: google("gemini-2.5-flash"),
+      model: google("gemini-2.0-flash-lite"),
       messages: aiMessages,
       system: systemPrompt,
     })

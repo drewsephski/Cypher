@@ -1,5 +1,6 @@
 {
-  "style": "origin-ui",
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
   "rsc": true,
   "tsx": true,
   "tailwind": {
@@ -9,12 +10,13 @@
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils",
-    "ui": "@/components/origin-ui",
+    "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "registries": {}
 }

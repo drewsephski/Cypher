@@ -36,21 +36,52 @@ export default function ChatPage() {
   const [downloadSuccess, setDownloadSuccess] = useState(false)
   const [currentUserRequest, setCurrentUserRequest] = useState("")
 
-  const [generatedCode, setGeneratedCode] = useState(`function WelcomeComponent() {
-  return (
-    <div className="p-6 max-w-md mx-auto bg-card text-card-foreground rounded-lg shadow-lg border border-border">
-      <h2 className="text-xl font-semibold mb-4">
-        Welcome to a0
-      </h2>
-      <p className="text-muted-foreground">
-        Describe your component and let AI generate React + TypeScript instantly.
-      </p>
-    </div>
-  )
-}
+  const [generatedCode, setGeneratedCode] = useState(`function WelcomeHero() {
+    return (
+      <div className="w-full max-w-4xl mx-auto py-16 px-6 sm:py-24 lg:py-32">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            Welcome to <span className="bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">cypher</span>
+          </h1>
+          <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl mx-auto">
+            Transform your ideas into production-ready React components with AI. Just describe what you need, and we'll generate clean, type-safe code instantly.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-x-6">
+            <a
+              href="#get-started"
+              className="rounded-md bg-orange-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 transition-colors duration-200"
+            >
+              Get started
+            </a>
+            <a href="#how-it-works" className="text-sm font-semibold leading-6 text-foreground hover:text-orange-500 transition-colors duration-200">
+              Learn more <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <div className="mt-16 flow-root sm:mt-24">
+          <div className="-m-2 rounded-xl bg-card/50 p-2 ring-1 ring-border/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+            <div className="rounded-md bg-background p-8 shadow-2xl ring-1 ring-border/10">
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
+                  <div className="h-2.5 w-2.5 rounded-full bg-yellow-500"></div>
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-500"></div>
+                  <div className="flex-1 text-center text-sm font-medium text-muted-foreground">
+                    Preview
+                  </div>
+                </div>
+                <div className="text-center py-4">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-// Export as default for the preview
-window.default = WelcomeComponent;`)
+  // Export as default for the preview
+  window.default = WelcomeHero;`)
 
   const { theme } = useTheme()
   const [selectedTab, setSelectedTab] = useState("preview")
@@ -854,7 +885,7 @@ export default ${componentName}
           </div>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-6">
+        <ScrollArea className="flex-1 min-h-0 p-6">
           <div className="space-y-6">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -908,13 +939,58 @@ export default ${componentName}
           </div>
         )}
 
+        {/* Prompt Suggestions */}
+        <div className="p-4 border-t border-border bg-card/50">
+          <h3 className="text-sm font-medium text-muted-foreground mb-3">Try these examples:</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <button
+              onClick={() => setInput("A modern dashboard card with metrics, a chart, and quick actions")}
+              className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
+            >
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                <div>
+                  <div className="font-medium text-foreground">Analytics Card</div>
+                  <div className="text-xs text-muted-foreground">Metrics & charts</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setInput("A sleek product card with image, title, description, and add to cart button")}
+              className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
+            >
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                <div>
+                  <div className="font-medium text-foreground">Product Card</div>
+                  <div className="text-xs text-muted-foreground">E-commerce ready</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setInput("A clean pricing component with three tiers, feature lists, and toggle between monthly/yearly")}
+              className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
+            >
+              <div className="flex items-start gap-2">
+                <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                <div>
+                  <div className="font-medium text-foreground">Pricing Tiers</div>
+                  <div className="text-xs text-muted-foreground">With feature list</div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* Input */}
-        <div className="p-6 border-t border-border">
+        <div className="sticky bottom-0 p-6 border-t border-border bg-card z-10">
           <form onSubmit={handleSubmit} className="flex gap-3">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask a0 to build a component..."
+              placeholder="Ask cypher to build a component..."
               className="flex-1 rounded-xl border-border/50 bg-background/50 px-4 py-3 focus:ring-2 focus:ring-primary/20"
               disabled={isLoading}
             />
