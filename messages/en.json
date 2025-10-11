@@ -1,0 +1,43 @@
+{
+  "landing": {
+    "caseStudies": {
+      "title": "Case Studies",
+      "description": "Explore real-world examples of AI-powered component generation",
+      "clickToWatch": "Try this example",
+      "cases": [
+        {
+          "title": "Eiffel Tower vs Tallest Building",
+          "description": "Compare architectural marvels with interactive data visualization"
+        },
+        {
+          "title": "GitHub Top Trending Repo",
+          "description": "Analyze repository metrics and build contribution insights"
+        },
+        {
+          "title": "Nanjing Traditional Dishes",
+          "description": "Create a culinary guide with regional food recommendations"
+        },
+        {
+          "title": "Rental Apartment Decoration",
+          "description": "Design interior layout tools for apartment planning"
+        },
+        {
+          "title": "Review of The Professional",
+          "description": "Build a movie review platform with rating systems"
+        },
+        {
+          "title": "China Food Delivery",
+          "description": "Develop a food delivery tracking and recommendation system"
+        },
+        {
+          "title": "Ultra-Processed Foods",
+          "description": "Create nutritional analysis tools for food awareness"
+        },
+        {
+          "title": "AI Twin Insurance",
+          "description": "Build personalized insurance recommendation systems"
+        }
+      ]
+    }
+  }
+}

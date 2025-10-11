@@ -7,7 +7,7 @@ import { Input } from "@/components/origin-ui/input"
 import { Card } from "@/components/origin-ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
 import { ScrollArea } from "@/components/origin-ui/scroll-area"
-import { Send, Code, Eye, Sparkles, Download, FileText, Github, ArrowRight } from "lucide-react"
+import { Send, Code, Eye, Sparkles, Download, FileText, Github, ArrowRight, MessageSquareIcon, Copy } from "lucide-react"
 import CodeMirror from "@uiw/react-codemirror"
 import { javascript } from "@codemirror/lang-javascript"
 import { oneDark } from "@codemirror/theme-one-dark"
@@ -20,6 +20,31 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark as syntaxOneDark, oneLight as syntaxOneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
 import Link from "next/link"
 import ThemeToggle from "@/components/theme-toggle"
+import { toast } from "sonner"
+import { Conversation, ConversationContent, ConversationEmptyState, ConversationScrollButton } from "@/components/ai-elements/conversation"
+import { Message, MessageContent, MessageAvatar } from "@/components/ai-elements/message"
+import { Response } from "@/components/ai-elements/response"
+import { PromptInput, PromptInputTextarea, PromptInputToolbar, PromptInputTools, PromptInputSubmit, PromptInputAttachments, PromptInputAttachment } from "@/components/ai-elements/prompt-input"
+import { Suggestions, Suggestion } from "@/components/ai-elements/suggestion"
+import { Loader } from "@/components/ai-elements/loader"
+import { Actions, Action } from "@/components/ai-elements/actions"
+import { Artifact, ArtifactHeader, ArtifactTitle, ArtifactDescription, ArtifactActions, ArtifactAction, ArtifactContent, ArtifactClose } from "@/components/ai-elements/artifact"
+import { Branch } from "@/components/ai-elements/branch"
+import { Canvas } from "@/components/ai-elements/canvas"
+import { ChainOfThought, ChainOfThoughtHeader, ChainOfThoughtStep, ChainOfThoughtContent, ChainOfThoughtSearchResults, ChainOfThoughtSearchResult, ChainOfThoughtImage } from "@/components/ai-elements/chain-of-thought"
+import { CodeBlock, CodeBlockCopyButton } from "@/components/ai-elements/code-block"
+import { Context, ContextTrigger, ContextContent, ContextContentHeader, ContextContentBody, ContextContentFooter, ContextInputUsage, ContextOutputUsage, ContextReasoningUsage, ContextCacheUsage } from "@/components/ai-elements/context"
+import { Controls } from "@/components/ai-elements/controls"
+import { Edge } from "@/components/ai-elements/edge"
+import { Image } from "@/components/ai-elements/image"
+import { InlineCitation } from "@/components/ai-elements/inline-citation"
+import { Node } from "@/components/ai-elements/node"
+import { Panel } from "@/components/ai-elements/panel"
+import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/ai-elements/reasoning"
+import { Sources } from "@/components/ai-elements/sources"
+import { Task } from "@/components/ai-elements/task"
+import { Tool } from "@/components/ai-elements/tool"
+import { Toolbar } from "@/components/ai-elements/toolbar"
 
 interface Message {
   id: string
@@ -35,6 +60,17 @@ export default function ChatPage() {
   const [error, setError] = useState<string | null>(null)
   const [downloadSuccess, setDownloadSuccess] = useState(false)
   const [currentUserRequest, setCurrentUserRequest] = useState("")
+  const [tokenUsage, setTokenUsage] = useState<{
+    inputTokens: number
+    outputTokens: number
+    reasoningTokens: number
+    cachedInputTokens: number
+  }>({
+    inputTokens: 0,
+    outputTokens: 0,
+    reasoningTokens: 0,
+    cachedInputTokens: 0
+  })
 
   const [generatedCode, setGeneratedCode] = useState(`function WelcomeHero() {
     return (
@@ -528,7 +564,7 @@ Focus only on what's needed for this specific use case. Be concise and practical
 
             // Add React hook usage example
             instructions += `**React Hook Integration:**\n`
-            instructions += `\`\`\`jsx\nimport { useState, useEffect } from 'react'\n\nconst MyComponent = () => {\n  const [data, setData] = useState(null)\n  const [loading, setLoading] = useState(false)\n  const [error, setError] = useState(null)\n\n  const fetchData = async () => {\n    setLoading(true)\n    setError(null)\n    try {\n      const result = await ${method.toLowerCase()}Data()\n      setData(result)\n    } catch (err) {\n      setError(err.message)\n    } finally {\n      setLoading(false)\n    }\n  }\n\n  useEffect(() => {\n    fetchData() // Fetch on component mount\n  }, [])\n\n  if (loading) return <div>Loading...</div>\n  if (error) return <div>Error: {error}</div>\n  if (!data) return <div>No data</div>\n\n  return (\n    <div>\n      {/* Render your data here */}\n      <pre>{JSON.stringify(data, null, 2)}</pre>\n    </div>\n  )\n}\n\`\`\`\n\n`
+            instructions += `\`\`\`jsx\nimport { Response } from 'react'\n\nconst MyComponent = () => {\n  const [data, setData] = useState(null)\n  const [loading, setLoading] = useState(false)\n  const [error, setError] = useState(null)\n\n  const fetchData = async () => {\n    setLoading(true)\n    setError(null)\n    try {\n      const result = await ${method.toLowerCase()}Data()\n      setData(result)\n    } catch (err) {\n      setError(err.message)\n    } finally {\n      setLoading(false)\n    }\n  }\n\n  useEffect(() => {\n    fetchData() // Fetch on component mount\n  }, [])\n\n  if (loading) return <div>Loading...</div>\n  if (error) return <div>Error: {error}</div>\n  if (!data) return <div>No data</div>\n\n  return (\n    <div>\n      {/* Render your data here */}\n      <pre>{JSON.stringify(data, null, 2)}</pre>\n    </div>\n  )\n}\n\`\`\`\n\n`
           })
         }
 
@@ -739,6 +775,30 @@ export default ${componentName}
     setTimeout(() => setDownloadSuccess(false), 2000)
   }
 
+  // Copy component code to clipboard
+  const copyComponent = async () => {
+    try {
+      const componentName = extractComponentName(generatedCode)
+
+      const fileContent = `// ${componentName} Component
+// Generated by AI Component Generator
+// Built with Origin UI and Tailwind CSS
+
+import React from 'react'
+
+${generatedCode.replace(/window\.default\s*=\s*\w+;?\s*$/g, "").trim()}
+
+export default ${componentName}
+`
+
+      await navigator.clipboard.writeText(fileContent)
+      toast.success("Code copied to clipboard!")
+    } catch (err) {
+      console.error('Failed to copy code:', err)
+      toast.error("Failed to copy code to clipboard")
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
@@ -873,20 +933,64 @@ export default ${componentName}
         <div className="w-1/2 flex flex-col bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
           {/* Chat Header */}
           <div className="p-6 border-b border-border bg-card">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h1 className="font-semibold text-lg text-foreground">AI Assistant</h1>
+                  <p className="text-sm text-muted-foreground">Powered by Gemini 2.5 Flash</p>
+                </div>
               </div>
-              <div>
-                <h1 className="font-semibold text-lg text-foreground">AI Assistant</h1>
-                <p className="text-sm text-muted-foreground">Powered by Gemini 2.5 Flash</p>
+
+              {/* Context usage display */}
+              <Context
+                usedTokens={tokenUsage.inputTokens + tokenUsage.outputTokens}
+                maxTokens={100000}
+                usage={{
+                  inputTokens: tokenUsage.inputTokens,
+                  outputTokens: tokenUsage.outputTokens,
+                  reasoningTokens: tokenUsage.reasoningTokens,
+                  cachedInputTokens: tokenUsage.cachedInputTokens,
+                  totalTokens: tokenUsage.inputTokens + tokenUsage.outputTokens + tokenUsage.reasoningTokens + tokenUsage.cachedInputTokens
+                }}
+                modelId="gemini-2.5-flash"
+              >
+                <ContextTrigger />
+                <ContextContent>
+                  <ContextContentHeader />
+                  <ContextContentBody>
+                    <div className="space-y-2">
+                      {/* Context usage components will be added when types are fixed */}
+                      <div className="text-xs text-muted-foreground">
+                        Token usage tracking coming soon...
+                      </div>
+                    </div>
+                  </ContextContentBody>
+                  <ContextContentFooter />
+                </ContextContent>
+              </Context>
+            </div>
+
+            {/* Task status bar */}
+            <div className="mt-4">
+              <div className={`flex items-center gap-2 text-sm ${
+                isLoading ? 'text-blue-600' : messages.length > 0 ? 'text-green-600' : 'text-muted-foreground'
+              }`}>
+                <div className={`w-2 h-2 rounded-full ${
+                  isLoading ? 'bg-blue-600 animate-pulse' : messages.length > 0 ? 'bg-green-600' : 'bg-muted-foreground'
+                }`} />
+                <span>
+                  {isLoading ? "Generating component..." : messages.length > 0 ? "Component generated successfully" : "Ready to generate component"}
+                </span>
               </div>
             </div>
           </div>
 
-        {/* Messages */}
-        <ScrollArea className="flex-1 min-h-0 p-6">
-          <div className="space-y-6">
+          {/* Messages - Using AI Elements with enhanced functionality */}
+          <div className="flex-1 min-h-0 p-6 overflow-y-auto">
+            <div className="space-y-6">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
@@ -912,49 +1016,111 @@ export default ${componentName}
                       </ReactMarkdown>
                     </div>
                   ) : (
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                    <div className="space-y-3">
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+
+                      {/* Add Actions for assistant messages */}
+                      {message.role === "assistant" && (
+                        <Actions className="justify-end">
+                          <Action
+                            tooltip="Copy message"
+                            onClick={() => {
+                              navigator.clipboard.writeText(message.content)
+                              toast.success("Message copied to clipboard!")
+                            }}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Action>
+                        </Actions>
+                      )}
+                    </div>
                   )}
                   <p className="text-xs opacity-70 mt-1">{message.timestamp.toLocaleTimeString()}</p>
                 </div>
               </div>
             ))}
+
+            {/* Enhanced loading indicator with Chain of Thought */}
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-muted text-muted-foreground rounded-lg p-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-current rounded-full animate-pulse"></div>
-                    <div className="w-2 h-2 bg-current rounded-full animate-pulse delay-100"></div>
-                    <div className="w-2 h-2 bg-current rounded-full animate-pulse delay-200"></div>
-                  </div>
-                </div>
+              <div className="flex items-center gap-2 py-4">
+                <Loader size={16} />
+                <span className="text-sm text-muted-foreground">
+                  AI is thinking...
+                </span>
               </div>
             )}
-          </div>
-        </ScrollArea>
 
-        {/* Error Display */}
-        {error && (
-          <div className="p-4 bg-destructive/10 border-t border-destructive/20">
-            <p className="text-sm text-destructive">Error: {error}</p>
-          </div>
-        )}
+            {/* Chain of Thought for loading state */}
+            {isLoading && (
+              <ChainOfThought defaultOpen={false}>
+                <ChainOfThoughtHeader>
+                  Thinking Process
+                </ChainOfThoughtHeader>
+                <ChainOfThoughtContent>
+                  <ChainOfThoughtStep
+                    label="Analyzing your request"
+                    description="Understanding the component requirements"
+                    status="active"
+                  />
+                  <ChainOfThoughtStep
+                    label="Planning component structure"
+                    description="Designing the optimal component architecture"
+                    status="pending"
+                  />
+                  <ChainOfThoughtStep
+                    label="Generating code"
+                    description="Writing clean, production-ready React code"
+                    status="pending"
+                  />
+                  <ChainOfThoughtStep
+                    label="Adding documentation"
+                    description="Creating comprehensive usage instructions"
+                    status="pending"
+                  />
+                </ChainOfThoughtContent>
+              </ChainOfThought>
+            )}
 
-        {/* Prompt Suggestions */}
-        <div className="p-4 border-t border-border bg-card/50">
-          <h3 className="text-sm font-medium text-muted-foreground mb-3">Try these examples:</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <button
-              onClick={() => setInput("A modern dashboard card with metrics, a chart, and quick actions")}
-              className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
-            >
-              <div className="flex items-start gap-2">
-                <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
-                <div>
-                  <div className="font-medium text-foreground">Analytics Card</div>
-                  <div className="text-xs text-muted-foreground">Metrics & charts</div>
-                </div>
-              </div>
-            </button>
+            {/* Reasoning component for assistant messages - Collapsible by default */}
+            {messages.filter(m => m.role === "assistant").length > 0 && (
+              <Reasoning defaultOpen={false}>
+                <ReasoningTrigger>
+                  Show AI Reasoning Process
+                </ReasoningTrigger>
+                <ReasoningContent>
+                  Based on the analysis of your request, I've generated a component that matches your specifications with proper TypeScript types, responsive design, and comprehensive documentation.
+
+                  **Sources:** React Documentation, Tailwind CSS Guide, Origin UI Components
+                </ReasoningContent>
+              </Reasoning>
+            )}
+            </div>
+          </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className="p-4 bg-destructive/10 border-t border-destructive/20">
+              <p className="text-sm text-destructive">Error: {error}</p>
+            </div>
+          )}
+
+          {/* Prompt Suggestions - Using AI Elements Suggestions Component */}
+          {messages.length === 0 && (
+            <div className="p-4 border-t border-border bg-card/50">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3">Try these examples:</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <button
+                  onClick={() => setInput("A modern dashboard card with metrics, a chart, and quick actions")}
+                  className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
+                >
+                  <div className="flex items-start gap-2">
+                    <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                    <div>
+                      <div className="font-medium text-foreground">Analytics Card</div>
+                      <div className="text-xs text-muted-foreground">Metrics & charts</div>
+                    </div>
+                  </div>
+                </button>
 
             <button
               onClick={() => setInput("A sleek product card with image, title, description, and add to cart button")}
@@ -983,6 +1149,7 @@ export default ${componentName}
             </button>
           </div>
         </div>
+          )}
 
         {/* Input */}
         <div className="sticky bottom-0 p-6 border-t border-border bg-card z-10">
@@ -1015,6 +1182,28 @@ export default ${componentName}
               <h2 className="font-semibold text-lg text-foreground">Component Preview</h2>
               <p className="text-sm text-muted-foreground">Preview | Code | Docs</p>
             </div>
+
+            {/* Toolbar for preview actions */}
+            <Toolbar>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setSelectedTab("code")}
+                className="gap-2"
+              >
+                <Code className="w-4 h-4" />
+                View Code
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setSelectedTab("instructions")}
+                className="gap-2"
+              >
+                <FileText className="w-4 h-4" />
+                Documentation
+              </Button>
+            </Toolbar>
           </div>
         </div>
 
@@ -1049,6 +1238,15 @@ export default ${componentName}
               <div className="flex items-center gap-2">
                 {downloadSuccess && <span className="text-sm text-green-600 dark:text-green-400">Downloaded!</span>}
                 <Button
+                  onClick={copyComponent}
+                  size="sm"
+                  variant="outline"
+                  className="flex items-center gap-2 bg-transparent rounded-lg"
+                >
+                  <Copy className="w-4 h-4" />
+                  Copy
+                </Button>
+                <Button
                   onClick={downloadComponent}
                   size="sm"
                   variant="outline"
@@ -1059,15 +1257,26 @@ export default ${componentName}
                 </Button>
               </div>
             </div>
-            <Card className="flex-1 overflow-hidden rounded-xl border-border/50 shadow-sm">
+            <Artifact className="flex-1 overflow-hidden">
               {/* File Header */}
-              <div className="flex items-center px-4 py-2 bg-muted/30 border-b border-border">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="font-mono">{extractComponentName(generatedCode)}.tsx</span>
-                </div>
-              </div>
-              <div className="h-full overflow-y-auto scrollbar-hide">
+              <ArtifactHeader>
+                <ArtifactTitle>{extractComponentName(generatedCode)}.tsx</ArtifactTitle>
+                <ArtifactActions>
+                  <ArtifactAction
+                    tooltip="Copy code"
+                    onClick={copyComponent}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </ArtifactAction>
+                  <ArtifactAction
+                    tooltip="Download file"
+                    onClick={downloadComponent}
+                  >
+                    <Download className="w-4 h-4" />
+                  </ArtifactAction>
+                </ArtifactActions>
+              </ArtifactHeader>
+              <ArtifactContent className="h-full overflow-y-auto scrollbar-hide">
                 <CodeMirror
                   value={generatedCode}
                   onChange={(value) => setGeneratedCode(value)}
@@ -1075,14 +1284,31 @@ export default ${componentName}
                   theme={theme === "dark" ? oneDark : undefined}
                   className="h-full"
                 />
-              </div>
-            </Card>
+              </ArtifactContent>
+            </Artifact>
           </TabsContent>
 
           <TabsContent value="instructions" className="flex-1 p-6 pt-4 overflow-hidden">
-            <Card className="h-full overflow-hidden rounded-xl border-border/50 shadow-sm">
-              <div className="h-full overflow-y-auto scrollbar-hide p-6">
-                <div className="prose prose-sm max-w-none text-foreground leading-relaxed">
+            <Artifact className="h-full overflow-hidden">
+              <ArtifactHeader>
+                <div>
+                  <ArtifactTitle>Component Documentation</ArtifactTitle>
+                  <ArtifactDescription>Comprehensive usage guide and API integration details</ArtifactDescription>
+                </div>
+                <ArtifactActions>
+                  <ArtifactAction
+                    tooltip="Copy documentation"
+                    onClick={() => {
+                      navigator.clipboard.writeText(instructions)
+                      toast.success("Documentation copied to clipboard!")
+                    }}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </ArtifactAction>
+                </ArtifactActions>
+              </ArtifactHeader>
+              <ArtifactContent className="h-full overflow-y-auto scrollbar-hide">
+                <div className="prose prose-sm max-w-none text-foreground leading-relaxed p-6">
                   <ReactMarkdown
                     components={{
                       h1: ({ children }) => (
@@ -1109,7 +1335,9 @@ export default ${componentName}
                             {children}
                           </code>
                         ) : (
-                          <code className={className}>{children}</code>
+                          <CodeBlock code={String(children)} language="javascript">
+                            <CodeBlockCopyButton />
+                          </CodeBlock>
                         )
                       },
                       pre: ({ children, ...props }) => {
@@ -1142,9 +1370,52 @@ export default ${componentName}
                   >
                     {instructions}
                   </ReactMarkdown>
+
+                  {/* Web Preview for external documentation */}
+                  <div className="mt-8 pt-8 border-t border-border">
+                    <h3 className="text-lg font-semibold mb-4">External Resources</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-4 border rounded-lg bg-card">
+                        <h4 className="font-medium mb-2">React Documentation</h4>
+                        <p className="text-sm text-muted-foreground mb-3">Official React documentation for components and hooks</p>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
+                            Visit Docs
+                          </a>
+                        </Button>
+                      </div>
+                      <div className="p-4 border rounded-lg bg-card">
+                        <h4 className="font-medium mb-2">Tailwind CSS</h4>
+                        <p className="text-sm text-muted-foreground mb-3">Utility-first CSS framework for styling</p>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer">
+                            Visit Docs
+                          </a>
+                        </Button>
+                      </div>
+                      <div className="p-4 border rounded-lg bg-card">
+                        <h4 className="font-medium mb-2">Origin UI Components</h4>
+                        <p className="text-sm text-muted-foreground mb-3">Beautiful, accessible React components</p>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href="https://origin-ui.com" target="_blank" rel="noopener noreferrer">
+                            Visit Docs
+                          </a>
+                        </Button>
+                      </div>
+                      <div className="p-4 border rounded-lg bg-card">
+                        <h4 className="font-medium mb-2">TypeScript Handbook</h4>
+                        <p className="text-sm text-muted-foreground mb-3">TypeScript documentation and guides</p>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener noreferrer">
+                            Visit Docs
+                          </a>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </ArtifactContent>
+            </Artifact>
           </TabsContent>
         </Tabs>
       </div>

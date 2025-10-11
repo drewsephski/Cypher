@@ -2,6 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
+import { ReactFlowProvider } from "@xyflow/react"
 import { Suspense } from "react"
 import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
@@ -62,10 +64,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${bricolage.variable}`}>
       <body className={`font-sans ${bricolage.variable} antialiased bg-background`}>
         <Suspense fallback={null}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <Navbar />
-            {children}
-          </ThemeProvider>
+          <ReactFlowProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <Navbar />
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </ReactFlowProvider>
         </Suspense>
         <Analytics />
       </body>
