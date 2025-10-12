@@ -2,7 +2,7 @@
 import { Button } from "@/components/origin-ui/button"
 import { Card } from "@/components/origin-ui/card"
 import { Badge } from "@/components/origin-ui/badge"
-import { ArrowRight, Sparkles, DollarSign, Github } from "lucide-react"
+import { ArrowRight, Sparkles, DollarSign, Github, ChevronUp, ArrowUp } from "lucide-react"
 import { CaseStudySection } from '@/components/case-studies'
 import { BentoSection } from '@/components/bento-section';
 import { useState, useEffect } from 'react';
@@ -106,6 +106,10 @@ export default function LandingPage() {
 
   const [selectedTech, setSelectedTech] = useState<string | null>(null);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   useEffect(() => {
     const removeSplineLogo = () => {
       console.log('🔍 Scanning for Spline logo elements...');
@@ -191,11 +195,15 @@ export default function LandingPage() {
             onLoad={handleLoad}
           />
 
-          {/* Simple overlay to hide Spline watermark */}
+          {/* Overlay to cover Spline branding */}
           <div
-            className="fixed bottom-4 right-4 w-40 h-12 bg-background/80 backdrop-blur-sm border border-border/50 rounded-md shadow-lg"
-            style={{ zIndex: 5 }}
-          />
+            className="absolute bottom-4 right-6 w-36 h-12 bg-background backdrop-blur-sm border border-border/50 rounded-lg shadow-lg flex items-center justify-center cursor-pointer hover:bg-background transition-colors group"
+            style={{ zIndex: 10 }}
+            onClick={scrollToTop}
+            title="Scroll to top"
+          >
+            <ArrowUp className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
         </div>
 
         {/* Foreground content - strategic pointer-events */}
@@ -212,7 +220,7 @@ export default function LandingPage() {
             style={{ pointerEvents: 'auto' }} // Badge is clickable
           >
             <Sparkles className="w-3 h-3 mr-1 animate-pulse" />
-            Powered by Google Gemini 2.5 Flash and ai-sdk
+            Powered by Google Gemini and ai-sdk
           </Badge>
 
           <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 text-balance font-bricolage leading-tight animate-slide-up drop-shadow-2xl">
@@ -298,7 +306,7 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="container-responsive py-20 relative" style={{ zIndex: 10, pointerEvents: 'auto' }}>
-        <Card className="p-12 md:p-20 text-center bg-gradient-to-br from-primary/5 via-primary/3 to-primary/8 border-primary/20 shadow-lg animate-slide-up backdrop-blur-sm">
+        <Card className="mb-24 p-12 md:p-20 text-center bg-gradient-to-br from-primary/5 via-primary/3 to-primary/8 border-primary/20 shadow-lg animate-slide-up backdrop-blur-sm relative" style={{ zIndex: 10 }}>
           <h2 className="text-hero-responsive font-bold text-foreground mb-8 leading-tight">Ready to build amazing components?</h2>
           <p className="text-responsive text-muted-foreground mb-16 max-width-responsive mx-auto leading-relaxed">
             Start generating production-ready React components with AI in seconds
@@ -318,6 +326,39 @@ export default function LandingPage() {
             </Button>
           </div>
         </Card>
+
+        {/* Second Spline 3D Element - positioned below CTA section */}
+        <div
+          className="relative w-full flex justify-center mt-16 mb-8"
+          style={{
+            zIndex: 5,
+          }}
+        >
+          <div
+            className="relative rounded-2xl overflow-hidden shadow-2xl"
+            style={{
+              width: 'min(500px, 90vw)',
+              height: 'min(250px, 45vw)',
+              maxWidth: '500px',
+              maxHeight: '250px',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            }}
+          >
+            <Spline
+              scene="https://prod.spline.design/Y5PQFkrveaQbhxqH/scene.splinecode"
+            />
+
+            {/* Overlay to cover Spline branding */}
+            <div
+              className="absolute bottom-4 right-4 w-36 h-12 bg-background backdrop-blur-sm border border-border/50 rounded-md shadow-lg flex items-center justify-center cursor-pointer hover:bg-background transition-colors group"
+              style={{ zIndex: 10 }}
+              onClick={scrollToTop}
+              title="Scroll to top"
+            >
+              <ChevronUp className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Footer */}

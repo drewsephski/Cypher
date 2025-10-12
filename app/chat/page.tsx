@@ -2,49 +2,48 @@
 import { useState, useEffect } from "react"
 import type React from "react"
 
-import { Button } from "@/components/origin-ui/button"
-import { Input } from "@/components/origin-ui/input"
-import { Card } from "@/components/origin-ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
-import { ScrollArea } from "@/components/origin-ui/scroll-area"
-import { Send, Code, Eye, Sparkles, Download, FileText, Github, ArrowRight, MessageSquareIcon, Copy } from "lucide-react"
+import { Button } from "../../components/origin-ui/button"
+import { Input } from "../../components/origin-ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/origin-ui/tabs"
+import { ScrollArea } from "../../components/origin-ui/scroll-area"
+import { Send, Code, Eye, Sparkles, Download, FileText, Github, ArrowRight, MessageSquareIcon, Copy, CheckCircle } from "lucide-react"
 import CodeMirror from "@uiw/react-codemirror"
 import { javascript } from "@codemirror/lang-javascript"
 import { oneDark } from "@codemirror/theme-one-dark"
 import { EditorView } from "@codemirror/view"
 import { useTheme } from "next-themes"
-import { SandboxedPreview } from "@/components/sandboxed-preview"
-import Navbar from "@/components/navbar"
+import { SandboxedPreview } from "../../components/sandboxed-preview"
+import Navbar from "../../components/navbar"
 import ReactMarkdown from "react-markdown"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark as syntaxOneDark, oneLight as syntaxOneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
 import Link from "next/link"
-import ThemeToggle from "@/components/theme-toggle"
+import ThemeToggle from "../../components/theme-toggle"
 import { toast } from "sonner"
-import { Conversation, ConversationContent, ConversationEmptyState, ConversationScrollButton } from "@/components/ai-elements/conversation"
-import { Message, MessageContent, MessageAvatar } from "@/components/ai-elements/message"
-import { Response } from "@/components/ai-elements/response"
-import { PromptInput, PromptInputTextarea, PromptInputToolbar, PromptInputTools, PromptInputSubmit, PromptInputAttachments, PromptInputAttachment } from "@/components/ai-elements/prompt-input"
-import { Suggestions, Suggestion } from "@/components/ai-elements/suggestion"
-import { Loader } from "@/components/ai-elements/loader"
-import { Actions, Action } from "@/components/ai-elements/actions"
-import { Artifact, ArtifactHeader, ArtifactTitle, ArtifactDescription, ArtifactActions, ArtifactAction, ArtifactContent, ArtifactClose } from "@/components/ai-elements/artifact"
-import { Branch } from "@/components/ai-elements/branch"
-import { Canvas } from "@/components/ai-elements/canvas"
-import { ChainOfThought, ChainOfThoughtHeader, ChainOfThoughtStep, ChainOfThoughtContent, ChainOfThoughtSearchResults, ChainOfThoughtSearchResult, ChainOfThoughtImage } from "@/components/ai-elements/chain-of-thought"
-import { CodeBlock, CodeBlockCopyButton } from "@/components/ai-elements/code-block"
-import { Context, ContextTrigger, ContextContent, ContextContentHeader, ContextContentBody, ContextContentFooter, ContextInputUsage, ContextOutputUsage, ContextReasoningUsage, ContextCacheUsage } from "@/components/ai-elements/context"
-import { Controls } from "@/components/ai-elements/controls"
-import { Edge } from "@/components/ai-elements/edge"
-import { Image } from "@/components/ai-elements/image"
-import { InlineCitation } from "@/components/ai-elements/inline-citation"
-import { Node } from "@/components/ai-elements/node"
-import { Panel } from "@/components/ai-elements/panel"
-import { Reasoning, ReasoningTrigger, ReasoningContent } from "@/components/ai-elements/reasoning"
-import { Sources } from "@/components/ai-elements/sources"
-import { Task } from "@/components/ai-elements/task"
-import { Tool } from "@/components/ai-elements/tool"
-import { Toolbar } from "@/components/ai-elements/toolbar"
+import { Conversation, ConversationContent, ConversationEmptyState, ConversationScrollButton } from "../../components/ai-elements/conversation"
+import { Message, MessageContent, MessageAvatar } from "../../components/ai-elements/message"
+import { Response } from "../../components/ai-elements/response"
+import { PromptInput, PromptInputTextarea, PromptInputToolbar, PromptInputTools, PromptInputSubmit, PromptInputAttachments, PromptInputAttachment } from "../../components/ai-elements/prompt-input"
+import { Suggestions, Suggestion } from "../../components/ai-elements/suggestion"
+import { Loader } from "../../components/ai-elements/loader"
+import { Actions, Action } from "../../components/ai-elements/actions"
+import { Artifact, ArtifactHeader, ArtifactTitle, ArtifactDescription, ArtifactActions, ArtifactAction, ArtifactContent, ArtifactClose } from "../../components/ai-elements/artifact"
+import { Branch } from "../../components/ai-elements/branch"
+import { Canvas } from "../../components/ai-elements/canvas"
+import { ChainOfThought, ChainOfThoughtHeader, ChainOfThoughtStep, ChainOfThoughtContent, ChainOfThoughtSearchResults, ChainOfThoughtSearchResult, ChainOfThoughtImage } from "../../components/ai-elements/chain-of-thought"
+import { CodeBlock, CodeBlockCopyButton } from "../../components/ai-elements/code-block"
+import { Context, ContextTrigger, ContextContent, ContextContentHeader, ContextContentBody, ContextContentFooter, ContextInputUsage, ContextOutputUsage, ContextReasoningUsage, ContextCacheUsage } from "../../components/ai-elements/context"
+import { Controls } from "../../components/ai-elements/controls"
+import { Edge } from "../../components/ai-elements/edge"
+import { Image } from "../../components/ai-elements/image"
+import { InlineCitation } from "../../components/ai-elements/inline-citation"
+import { Node } from "../../components/ai-elements/node"
+import { Panel } from "../../components/ai-elements/panel"
+import { Reasoning, ReasoningTrigger, ReasoningContent } from "../../components/ai-elements/reasoning"
+import { Sources } from "../../components/ai-elements/sources"
+import { Task } from "../../components/ai-elements/task"
+import { Toolbar } from "../../components/ai-elements/toolbar"
+import { ResizableChatLayout } from "../../components/resizable-chat-layout"
 
 interface Message {
   id: string
@@ -827,9 +826,9 @@ export default ${componentName}
     const statusMessage: Message = {
       id: (Date.now() + 1).toString(),
       role: "assistant",
-      content: urls.length > 0 
-        ? `🌐 Detected ${urls.length} URL(s) - Analyzing API documentation...\n📚 Scraping: ${urls.join(', ')}\n🎨 Generating your component with API integration...`
-        : "🎨 Generating your component...",
+      content: urls.length > 0
+        ? `🌐 Detected ${urls.length} URL(s) - Analyzing API documentation...\n📚 Scraping: ${urls.join(', ')}\n⚡ Generating your component with API integration...`
+        : "⚡ Generating your component...",
       timestamp: new Date(),
     }
     setMessages((prev) => [...prev, statusMessage])
@@ -887,10 +886,10 @@ export default ${componentName}
       await generateInstructions(cleanCode, input.trim(), null)
 
       // Check if documentation was analyzed and add results to success message
-      let successContent = "✅ Component generated successfully! Check the preview →"
+      let successContent = "<CheckCircle className=\"w-4 h-4 inline mr-1\" /> Component generated successfully! Check the preview →"
       
       if (urls.length > 0) {
-        successContent += `\n\n📚 **API Documentation Analyzed:**\n• Processed ${urls.length} documentation URL(s)\n• Enhanced with API integration context`
+        successContent += `\n\n<FileText className=\"w-4 h-4 inline mr-1\" /> **API Documentation Analyzed:**\n• Processed ${urls.length} documentation URL(s)\n• Enhanced with API integration context`
       }
 
       // Update status message to success
@@ -924,13 +923,9 @@ export default ${componentName}
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden">
-      <Navbar />
-
-      {/* Main Content - Split Screen with rounded corners */}
-      <div className="flex-1 flex bg-background p-4 gap-4 overflow-hidden pt-20">
-        {/* Left Panel - Chat */}
-        <div className="w-1/2 flex flex-col bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+    <ResizableChatLayout
+      leftPanel={
+        <div className="flex flex-col bg-card rounded-2xl border border-border shadow-sm overflow-hidden h-full">
           {/* Chat Header */}
           <div className="p-6 border-b border-border bg-card">
             <div className="flex items-center justify-between">
@@ -1000,7 +995,27 @@ export default ${componentName}
                       : "bg-muted/50 text-muted-foreground rounded-bl-md"
                   }`}
                 >
-                  {message.role === "assistant" && message.content.includes("📚 **API Documentation Analyzed:**") ? (
+                  {message.role === "assistant" && message.content.includes("CheckCircle") ? (
+                    <div className="text-sm leading-relaxed">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <span className="font-medium">Component generated successfully!</span>
+                      </div>
+                      <p className="text-muted-foreground ml-6">Check the preview →</p>
+                      {message.content.includes("FileText") && (
+                        <>
+                          <div className="flex items-center gap-2 mt-3 mb-1">
+                            <FileText className="w-4 h-4 text-blue-600" />
+                            <span className="font-medium">**API Documentation Analyzed:**</span>
+                          </div>
+                          <div className="ml-6 text-sm text-muted-foreground">
+                            • Processed {message.content.match(/(\d+)/)?.[1] || 'multiple'} documentation URL(s)<br />
+                            • Enhanced with API integration context
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ) : message.role === "assistant" && message.content.includes("📚 **API Documentation Analyzed:**") ? (
                     <div className="text-sm leading-relaxed">
                       <ReactMarkdown
                         components={{
@@ -1081,19 +1096,6 @@ export default ${componentName}
               </ChainOfThought>
             )}
 
-            {/* Reasoning component for assistant messages - Collapsible by default */}
-            {messages.filter(m => m.role === "assistant").length > 0 && (
-              <Reasoning defaultOpen={false}>
-                <ReasoningTrigger>
-                  Show AI Reasoning Process
-                </ReasoningTrigger>
-                <ReasoningContent>
-                  Based on the analysis of your request, I've generated a component that matches your specifications with proper TypeScript types, responsive design, and comprehensive documentation.
-
-                  **Sources:** React Documentation, Tailwind CSS Guide, Origin UI Components
-                </ReasoningContent>
-              </Reasoning>
-            )}
             </div>
           </div>
 
@@ -1172,254 +1174,254 @@ export default ${componentName}
           </form>
         </div>
       </div>
-
-      {/* Right Panel - Preview */}
-      <div className="w-1/2 flex flex-col bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
-        {/* Preview Header */}
-        <div className="p-6 border-b border-border bg-card">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="font-semibold text-lg text-foreground">Component Preview</h2>
-              <p className="text-sm text-muted-foreground">Preview | Code | Docs</p>
-            </div>
-
-            {/* Toolbar for preview actions */}
-            <Toolbar>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setSelectedTab("code")}
-                className="gap-2"
-              >
-                <Code className="w-4 h-4" />
-                View Code
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setSelectedTab("instructions")}
-                className="gap-2"
-              >
-                <FileText className="w-4 h-4" />
-                Documentation
-              </Button>
-            </Toolbar>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-6 pt-4 pb-0 flex-shrink-0">
-            <TabsList className="grid w-full grid-cols-3 rounded-xl">
-              <TabsTrigger value="preview" className="flex items-center gap-2 rounded-lg">
-                <Eye className="w-4 h-4" />
-                Preview
-              </TabsTrigger>
-              <TabsTrigger value="code" className="flex items-center gap-2 rounded-lg">
-                <Code className="w-4 h-4" />
-                Code
-              </TabsTrigger>
-              <TabsTrigger value="instructions" className="flex items-center gap-2 rounded-lg">
-                <FileText className="w-4 h-4" />
-                Instructions
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="preview" className="flex-1 p-3 overflow-hidden min-h-0">
-            <div className="h-full w-full min-h-0">
-              <SandboxedPreview code={generatedCode} />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="code" className="flex-1 p-6 pt-4 flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-muted-foreground">Component Code</h3>
-              <div className="flex items-center gap-2">
-                {downloadSuccess && <span className="text-sm text-green-600 dark:text-green-400">Downloaded!</span>}
-                <Button
-                  onClick={copyComponent}
-                  size="sm"
-                  variant="outline"
-                  className="flex items-center gap-2 bg-transparent rounded-lg"
-                >
-                  <Copy className="w-4 h-4" />
-                  Copy
-                </Button>
-                <Button
-                  onClick={downloadComponent}
-                  size="sm"
-                  variant="outline"
-                  className="flex items-center gap-2 bg-transparent rounded-lg"
-                >
-                  <Download className="w-4 h-4" />
-                  Download
-                </Button>
+      }
+      rightPanel={
+        <div className="flex flex-col bg-card rounded-2xl border border-border shadow-sm overflow-hidden h-full">
+          {/* Preview Header */}
+          <div className="p-6 border-b border-border bg-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-semibold text-lg text-foreground">Component Preview</h2>
+                <p className="text-sm text-muted-foreground">Preview | Code | Docs</p>
               </div>
+
+              {/* Toolbar for preview actions */}
+              <Toolbar>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setSelectedTab("code")}
+                  className="gap-2"
+                >
+                  <Code className="w-4 h-4" />
+                  View Code
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setSelectedTab("instructions")}
+                  className="gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  Documentation
+                </Button>
+              </Toolbar>
             </div>
-            <Artifact className="flex-1 overflow-hidden">
-              {/* File Header */}
-              <ArtifactHeader>
-                <ArtifactTitle>{extractComponentName(generatedCode)}.tsx</ArtifactTitle>
-                <ArtifactActions>
-                  <ArtifactAction
-                    tooltip="Copy code"
+          </div>
+
+          {/* Tabs */}
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-6 pt-4 pb-0 flex-shrink-0">
+              <TabsList className="grid w-full grid-cols-3 rounded-xl">
+                <TabsTrigger value="preview" className="flex items-center gap-2 rounded-lg">
+                  <Eye className="w-4 h-4" />
+                  Preview
+                </TabsTrigger>
+                <TabsTrigger value="code" className="flex items-center gap-2 rounded-lg">
+                  <Code className="w-4 h-4" />
+                  Code
+                </TabsTrigger>
+                <TabsTrigger value="instructions" className="flex items-center gap-2 rounded-lg">
+                  <FileText className="w-4 h-4" />
+                  Instructions
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="preview" className="flex-1 p-3 overflow-hidden min-h-0">
+              <div className="h-full w-full min-h-0">
+                <SandboxedPreview code={generatedCode} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="code" className="flex-1 p-6 pt-4 flex flex-col overflow-hidden">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-muted-foreground">Component Code</h3>
+                <div className="flex items-center gap-2">
+                  {downloadSuccess && <span className="text-sm text-green-600 dark:text-green-400">Downloaded!</span>}
+                  <Button
                     onClick={copyComponent}
+                    size="sm"
+                    variant="outline"
+                    className="flex items-center gap-2 bg-transparent rounded-lg"
                   >
                     <Copy className="w-4 h-4" />
-                  </ArtifactAction>
-                  <ArtifactAction
-                    tooltip="Download file"
+                    Copy
+                  </Button>
+                  <Button
                     onClick={downloadComponent}
+                    size="sm"
+                    variant="outline"
+                    className="flex items-center gap-2 bg-transparent rounded-lg"
                   >
                     <Download className="w-4 h-4" />
-                  </ArtifactAction>
-                </ArtifactActions>
-              </ArtifactHeader>
-              <ArtifactContent className="h-full overflow-y-auto scrollbar-hide">
-                <CodeMirror
-                  value={generatedCode}
-                  onChange={(value) => setGeneratedCode(value)}
-                  extensions={[javascript({ jsx: true }), EditorView.lineWrapping]}
-                  theme={theme === "dark" ? oneDark : undefined}
-                  className="h-full"
-                />
-              </ArtifactContent>
-            </Artifact>
-          </TabsContent>
-
-          <TabsContent value="instructions" className="flex-1 p-6 pt-4 overflow-hidden">
-            <Artifact className="h-full overflow-hidden">
-              <ArtifactHeader>
-                <div>
-                  <ArtifactTitle>Component Documentation</ArtifactTitle>
-                  <ArtifactDescription>Comprehensive usage guide and API integration details</ArtifactDescription>
+                    Download
+                  </Button>
                 </div>
-                <ArtifactActions>
-                  <ArtifactAction
-                    tooltip="Copy documentation"
-                    onClick={() => {
-                      navigator.clipboard.writeText(instructions)
-                      toast.success("Documentation copied to clipboard!")
-                    }}
-                  >
-                    <Copy className="w-4 h-4" />
-                  </ArtifactAction>
-                </ArtifactActions>
-              </ArtifactHeader>
-              <ArtifactContent className="h-full overflow-y-auto scrollbar-hide">
-                <div className="prose prose-sm max-w-none text-foreground leading-relaxed p-6">
-                  <ReactMarkdown
-                    components={{
-                      h1: ({ children }) => (
-                        <h1 className="text-2xl font-bold text-foreground mb-4 mt-0 border-b border-border pb-2">
-                          {children}
-                        </h1>
-                      ),
-                      h2: ({ children }) => (
-                        <h2 className="text-xl font-semibold text-foreground mb-3 mt-6 first:mt-0">{children}</h2>
-                      ),
-                      p: ({ children }) => <p className="text-foreground mb-4 leading-relaxed">{children}</p>,
-                      ul: ({ children }) => <ul className="list-none space-y-2 mb-4 pl-0">{children}</ul>,
-                      li: ({ children }) => (
-                        <li className="flex items-start gap-2 text-foreground">
-                          <span className="text-primary mt-1 text-sm">•</span>
-                          <span className="flex-1">{children}</span>
-                        </li>
-                      ),
-                      strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
-                      code: ({ children, className }) => {
-                        const isInline = !className
-                        return isInline ? (
-                          <code className="bg-muted text-foreground px-1.5 py-0.5 rounded text-sm font-mono border">
+              </div>
+              <Artifact className="flex-1 overflow-hidden">
+                {/* File Header */}
+                <ArtifactHeader>
+                  <ArtifactTitle>{extractComponentName(generatedCode)}.tsx</ArtifactTitle>
+                  <ArtifactActions>
+                    <ArtifactAction
+                      tooltip="Copy code"
+                      onClick={copyComponent}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </ArtifactAction>
+                    <ArtifactAction
+                      tooltip="Download file"
+                      onClick={downloadComponent}
+                    >
+                      <Download className="w-4 h-4" />
+                    </ArtifactAction>
+                  </ArtifactActions>
+                </ArtifactHeader>
+                <ArtifactContent className="h-full overflow-y-auto scrollbar-hide">
+                  <CodeMirror
+                    value={generatedCode}
+                    onChange={(value) => setGeneratedCode(value)}
+                    extensions={[javascript({ jsx: true }), EditorView.lineWrapping]}
+                    theme={theme === "dark" ? oneDark : undefined}
+                    className="h-full"
+                  />
+                </ArtifactContent>
+              </Artifact>
+            </TabsContent>
+
+            <TabsContent value="instructions" className="flex-1 p-6 pt-4 overflow-hidden">
+              <Artifact className="h-full overflow-hidden">
+                <ArtifactHeader>
+                  <div>
+                    <ArtifactTitle>Component Documentation</ArtifactTitle>
+                    <ArtifactDescription>Comprehensive usage guide and API integration details</ArtifactDescription>
+                  </div>
+                  <ArtifactActions>
+                    <ArtifactAction
+                      tooltip="Copy documentation"
+                      onClick={() => {
+                        navigator.clipboard.writeText(instructions)
+                        toast.success("Documentation copied to clipboard!")
+                      }}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </ArtifactAction>
+                  </ArtifactActions>
+                </ArtifactHeader>
+                <ArtifactContent className="h-full overflow-y-auto scrollbar-hide">
+                  <div className="prose prose-sm max-w-none text-foreground leading-relaxed p-6">
+                    <ReactMarkdown
+                      components={{
+                        h1: ({ children }) => (
+                          <h1 className="text-2xl font-bold text-foreground mb-4 mt-0 border-b border-border pb-2">
                             {children}
-                          </code>
-                        ) : (
-                          <CodeBlock code={String(children)} language="javascript">
-                            <CodeBlockCopyButton />
-                          </CodeBlock>
-                        )
-                      },
-                      pre: ({ children, ...props }) => {
-                        const child = children as any
-                        const className = child?.props?.className || ""
-                        const match = /language-(\w+)/.exec(className)
-                        const language = match ? match[1] : "javascript"
+                          </h1>
+                        ),
+                        h2: ({ children }) => (
+                          <h2 className="text-xl font-semibold text-foreground mb-3 mt-6 first:mt-0">{children}</h2>
+                        ),
+                        p: ({ children }) => <p className="text-foreground mb-4 leading-relaxed">{children}</p>,
+                        ul: ({ children }) => <ul className="list-none space-y-2 mb-4 pl-0">{children}</ul>,
+                        li: ({ children }) => (
+                          <li className="flex items-start gap-2 text-foreground">
+                            <span className="text-primary mt-1 text-sm">•</span>
+                            <span className="flex-1">{children}</span>
+                          </li>
+                        ),
+                        strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                        code: ({ children, className }) => {
+                          const isInline = !className
+                          return isInline ? (
+                            <code className="bg-muted text-foreground px-1.5 py-0.5 rounded text-sm font-mono border">
+                              {children}
+                            </code>
+                          ) : (
+                            <CodeBlock code={String(children)} language="javascript">
+                              <CodeBlockCopyButton />
+                            </CodeBlock>
+                          )
+                        },
+                        pre: ({ children, ...props }) => {
+                          const child = children as any
+                          const className = child?.props?.className || ""
+                          const match = /language-(\w+)/.exec(className)
+                          const language = match ? match[1] : "javascript"
 
-                        return (
-                          <div className="mb-4 mt-2">
-                            <SyntaxHighlighter
-                              style={theme === "dark" ? syntaxOneDark : syntaxOneLight}
-                              language={language}
-                              customStyle={{
-                                margin: 0,
-                                borderRadius: "0.5rem",
-                                backgroundColor: theme === "dark" ? "hsl(var(--muted))" : "hsl(var(--muted))",
-                                border: "1px solid hsl(var(--border))",
-                                fontSize: "0.875rem",
-                                lineHeight: "1.5",
-                              }}
-                              {...props}
-                            >
-                              {String(child?.props?.children || "").replace(/\n$/, "")}
-                            </SyntaxHighlighter>
-                          </div>
-                        )
-                      },
-                    }}
-                  >
-                    {instructions}
-                  </ReactMarkdown>
+                          return (
+                            <div className="mb-4 mt-2">
+                              <SyntaxHighlighter
+                                style={theme === "dark" ? syntaxOneDark : syntaxOneLight}
+                                language={language}
+                                customStyle={{
+                                  margin: 0,
+                                  borderRadius: "0.5rem",
+                                  backgroundColor: theme === "dark" ? "hsl(var(--muted))" : "hsl(var(--muted))",
+                                  border: "1px solid hsl(var(--border))",
+                                  fontSize: "0.875rem",
+                                  lineHeight: "1.5",
+                                }}
+                                {...props}
+                              >
+                                {String(child?.props?.children || "").replace(/\n$/, "")}
+                              </SyntaxHighlighter>
+                            </div>
+                          )
+                        },
+                      }}
+                    >
+                      {instructions}
+                    </ReactMarkdown>
 
-                  {/* Web Preview for external documentation */}
-                  <div className="mt-8 pt-8 border-t border-border">
-                    <h3 className="text-lg font-semibold mb-4">External Resources</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-4 border rounded-lg bg-card">
-                        <h4 className="font-medium mb-2">React Documentation</h4>
-                        <p className="text-sm text-muted-foreground mb-3">Official React documentation for components and hooks</p>
-                        <Button size="sm" variant="outline" asChild>
-                          <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-                            Visit Docs
-                          </a>
-                        </Button>
-                      </div>
-                      <div className="p-4 border rounded-lg bg-card">
-                        <h4 className="font-medium mb-2">Tailwind CSS</h4>
-                        <p className="text-sm text-muted-foreground mb-3">Utility-first CSS framework for styling</p>
-                        <Button size="sm" variant="outline" asChild>
-                          <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer">
-                            Visit Docs
-                          </a>
-                        </Button>
-                      </div>
-                      <div className="p-4 border rounded-lg bg-card">
-                        <h4 className="font-medium mb-2">Origin UI Components</h4>
-                        <p className="text-sm text-muted-foreground mb-3">Beautiful, accessible React components</p>
-                        <Button size="sm" variant="outline" asChild>
-                          <a href="https://origin-ui.com" target="_blank" rel="noopener noreferrer">
-                            Visit Docs
-                          </a>
-                        </Button>
-                      </div>
-                      <div className="p-4 border rounded-lg bg-card">
-                        <h4 className="font-medium mb-2">TypeScript Handbook</h4>
-                        <p className="text-sm text-muted-foreground mb-3">TypeScript documentation and guides</p>
-                        <Button size="sm" variant="outline" asChild>
-                          <a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener noreferrer">
-                            Visit Docs
-                          </a>
-                        </Button>
+                    {/* Web Preview for external documentation */}
+                    <div className="mt-8 pt-8 border-t border-border">
+                      <h3 className="text-lg font-semibold mb-4">External Resources</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 border rounded-lg bg-card">
+                          <h4 className="font-medium mb-2">React Documentation</h4>
+                          <p className="text-sm text-muted-foreground mb-3">Official React documentation for components and hooks</p>
+                          <Button size="sm" variant="outline" asChild>
+                            <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
+                              Visit Docs
+                            </a>
+                          </Button>
+                        </div>
+                        <div className="p-4 border rounded-lg bg-card">
+                          <h4 className="font-medium mb-2">Tailwind CSS</h4>
+                          <p className="text-sm text-muted-foreground mb-3">Utility-first CSS framework for styling</p>
+                          <Button size="sm" variant="outline" asChild>
+                            <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer">
+                              Visit Docs
+                            </a>
+                          </Button>
+                        </div>
+                        <div className="p-4 border rounded-lg bg-card">
+                          <h4 className="font-medium mb-2">Origin UI Components</h4>
+                          <p className="text-sm text-muted-foreground mb-3">Beautiful, accessible React components</p>
+                          <Button size="sm" variant="outline" asChild>
+                            <a href="https://origin-ui.com" target="_blank" rel="noopener noreferrer">
+                              Visit Docs
+                            </a>
+                          </Button>
+                        </div>
+                        <div className="p-4 border rounded-lg bg-card">
+                          <h4 className="font-medium mb-2">TypeScript Handbook</h4>
+                          <p className="text-sm text-muted-foreground mb-3">TypeScript documentation and guides</p>
+                          <Button size="sm" variant="outline" asChild>
+                            <a href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener noreferrer">
+                              Visit Docs
+                            </a>
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </ArtifactContent>
-            </Artifact>
-          </TabsContent>
-        </Tabs>
-      </div>
-      </div>
-    </div>
+                </ArtifactContent>
+              </Artifact>
+            </TabsContent>
+          </Tabs>
+        </div>
+      }
+    />
   )
 }

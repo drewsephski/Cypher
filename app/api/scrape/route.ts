@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { smartScrapeUrl } from '@/lib/scrapeUtils'
+import { smartScrapeUrl } from '../../../lib/scrapeUtils'
 
 export async function POST(request: NextRequest) {
   try {

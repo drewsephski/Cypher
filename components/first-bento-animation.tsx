@@ -1,37 +1,53 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
+
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, Cpu } from "lucide-react";
-
+import { MessageCircle, Sparkles } from "lucide-react";
 
 function StreamedResponse({ text, start }: { text: string; start: boolean }) {
   const [displayedText, setDisplayedText] = useState("");
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isCancelled = useRef(false);
 
   useEffect(() => {
     if (!start) return;
 
     setDisplayedText("");
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText((prev) => prev + text[i]);
-        i++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 20); // typing speed
+    isCancelled.current = false;
 
-    return () => clearInterval(interval);
+    const chars = Array.from(text);
+    let i = 0;
+
+    const startDelay = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        if (isCancelled.current) return;
+
+        if (i < chars.length) {
+          setDisplayedText((prev) => prev + (chars[i] ?? ""));
+          i++;
+        } else {
+          clearInterval(intervalRef.current!);
+          intervalRef.current = null;
+        }
+      }, 24);
+    }, 80);
+
+    return () => {
+      isCancelled.current = true;
+      clearInterval(intervalRef.current!);
+      clearTimeout(startDelay);
+    };
   }, [text, start]);
 
   return (
-    <div className="text-sm text-slate-700 dark:text-slate-300">
+    <div className="text-[13px] text-neutral-300 leading-relaxed whitespace-pre-wrap font-light">
       {displayedText}
       {start && displayedText.length < text.length && (
         <motion.span
-          className="inline-block w-1 h-4 bg-blue-500 ml-0.5"
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity }}
+          className="inline-block w-0.5 h-3.5 bg-neutral-400 ml-0.5"
+          animate={{ opacity: [1, 0.3] }}
+          transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
         />
       )}
     </div>
@@ -39,123 +55,101 @@ function StreamedResponse({ text, start }: { text: string; start: boolean }) {
 }
 
 export default function FirstBentoAnimation() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
 
-  const [shouldAnimate, setShouldAnimate] = useState(false);
   const [showThinking, setShowThinking] = useState(false);
   const [showResponse, setShowResponse] = useState(false);
   const [startStream, setStartStream] = useState(false);
 
-  const responseText = `Perfect! I'll create a beautiful React component for a product card with hover effects, responsive design, and clean styling. The component will include image display, title, description, pricing, and action buttons with smooth animations`;
+  const responseText =
+    "Building a minimal product card with refined hover states and dark aesthetics. Includes image, title, pricing, and action button with micro-interactions.";
 
   useEffect(() => {
-    if (isInView) {
-      // Reset states every time it comes into view
-      setShouldAnimate(false);
+    if (!isInView) return;
+
+    setShowThinking(false);
+    setShowResponse(false);
+    setStartStream(false);
+
+    const t1 = setTimeout(() => setShowThinking(true), 500);
+    const t2 = setTimeout(() => {
       setShowThinking(false);
-      setShowResponse(false);
-      setStartStream(false);
+      setShowResponse(true);
+      setStartStream(true);
+    }, 2200);
 
-      const animateTimer = setTimeout(() => setShouldAnimate(true), 500);
-
-      const thinkingTimer = setTimeout(() => setShowThinking(true), 1200);
-
-      const responseTimer = setTimeout(() => {
-        setShowThinking(false);
-        setShowResponse(true);
-        setStartStream(true);
-      }, 3500); // after “Thinking...” for ~2s
-
-      return () => {
-        clearTimeout(animateTimer);
-        clearTimeout(thinkingTimer);
-        clearTimeout(responseTimer);
-      };
-    }
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [isInView]);
 
   return (
     <div
       ref={ref}
-      className="w-full h-full min-h-[400px] p-4 flex flex-col items-center justify-center gap-5 relative"
+      className="relative w-full min-h-[320px] flex items-center justify-center py-8"
     >
-      <div className="pointer-events-none absolute bottom-0 left-0 h-20 w-full bg-gradient-to-t from-white to-transparent z-20 dark:from-slate-950"></div>
-
       <motion.div
-        className="max-w-md mx-auto w-full flex flex-col gap-2"
+        className="w-full max-w-lg mx-auto flex flex-col gap-3"
+        initial={false}
         animate={{
-          y: shouldAnimate ? -75 : 0,
+          opacity: isInView ? 1 : 0,
+          y: isInView ? 0 : 12,
         }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 25,
-        }}
+        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       >
         {/* User Message */}
-        <div className="flex items-end justify-end gap-3">
-          <motion.div
-            className="max-w-[280px] bg-slate-800 text-white p-4 rounded-2xl ml-auto shadow-lg dark:bg-secondary dark:text-white"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{
-              opacity: isInView ? 1 : 0,
-              x: isInView ? 0 : 20,
-            }}
-            transition={{
-              duration: 0.4,
-              ease: "easeOut",
-            }}
-          >
-            <p className="text-sm">
-              I need a React component for displaying product cards. Can you
-              create one with hover effects, responsive design, and modern
-              styling?
+        <motion.div
+          className="flex items-end justify-end gap-2.5 group"
+          initial={{ opacity: 0, x: 12 }}
+          animate={{ opacity: isInView ? 1 : 0, x: isInView ? 0 : 12 }}
+          transition={{ duration: 0.35, delay: 0.2 }}
+        >
+          <div className="max-w-[280px] px-3.5 py-2.5 bg-neutral-900/50 border border-neutral-800/60 rounded-xl transition-colors duration-200 group-hover:border-neutral-700/60">
+            <p className="text-[13px] text-neutral-200 leading-relaxed font-light">
+              Can you create a product card component with subtle hover effects and dark design?
             </p>
-          </motion.div>
-          <div className="flex items-center bg-slate-100 rounded-full w-fit border border-slate-300 flex-shrink-0 dark:bg-slate-900 dark:border-slate-700">
-            <div className="size-8 rounded-full flex-shrink-0 bg-blue-500/10 flex items-center justify-center">
-              <MessageCircle className="size-4 text-blue-500" />
-            </div>
           </div>
-        </div>
+          <div className="flex items-center justify-center size-7 rounded-full bg-neutral-900/60 border border-neutral-800/50">
+            <MessageCircle className="size-3.5 text-neutral-400" strokeWidth={1.5} />
+          </div>
+        </motion.div>
 
         {/* AI Response */}
-        <div className="flex items-start gap-2">
-          <div className="flex items-center bg-slate-100 rounded-full size-10 flex-shrink-0 justify-center shadow-md border border-slate-300 dark:bg-slate-900 dark:shadow-lg dark:border-slate-700">
-            <Cpu className="size-4 text-blue-500" />
+        <div className="flex items-start gap-2.5 group">
+          <div className="flex items-center justify-center size-7 rounded-full bg-neutral-900/60 border border-neutral-800/50">
+            <Sparkles className="size-3.5 text-neutral-400" strokeWidth={1.5} />
           </div>
 
-          <div className="relative flex-1 min-h-[60px]">
-            <AnimatePresence mode="wait">
+          <div className="relative flex-1 min-w-0">
+            <AnimatePresence mode="wait" initial={false}>
               {showThinking && (
                 <motion.div
                   key="thinking"
-                  className="bg-slate-100 p-4 rounded-2xl border border-slate-300 dark:bg-slate-900 dark:border-slate-700 w-fit"
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  className="px-3.5 py-2.5 rounded-xl border border-neutral-800/60 bg-neutral-900/40"
+                  initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25 }}
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                      {[0, 1, 2].map((index) => (
+                  <div className="flex items-center gap-2 text-neutral-500">
+                    <div className="flex gap-1">
+                      {[0, 1, 2].map((i) => (
                         <motion.div
-                          key={index}
-                          className="w-2 h-2 bg-slate-600 rounded-full dark:bg-blue-400"
-                          animate={{ y: [0, -6, 0] }}
+                          key={i}
+                          className="w-1 h-1 bg-neutral-500 rounded-full"
+                          animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{
-                            duration: 0.6,
+                            duration: 1.4,
                             repeat: Infinity,
-                            delay: index * 0.15,
+                            delay: i * 0.2,
                             ease: "easeInOut",
                           }}
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-slate-600 dark:text-slate-400 ml-1">
-                      Thinking...
-                    </span>
+                    <span className="text-xs font-light">Thinking</span>
                   </div>
                 </motion.div>
               )}
@@ -163,18 +157,11 @@ export default function FirstBentoAnimation() {
               {showResponse && (
                 <motion.div
                   key="response"
-                  className="md:min-w-[300px] min-w-[220px] p-4 bg-slate-100 border border-slate-300 rounded-xl shadow-lg dark:bg-slate-900 dark:border-slate-700"
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                  }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{
-                    duration: 0.4,
-                    ease: [0.4, 0, 0.2, 1],
-                  }}
+                  className="px-3.5 py-2.5 rounded-xl border border-neutral-800/60 bg-neutral-900/40 transition-colors duration-200 group-hover:border-neutral-700/60"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   <StreamedResponse text={responseText} start={startStream} />
                 </motion.div>
@@ -183,6 +170,11 @@ export default function FirstBentoAnimation() {
           </div>
         </div>
       </motion.div>
+
+      {/* Subtle ambient effect */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-neutral-700/5 blur-[100px] rounded-full" />
+      </div>
     </div>
   );
 }

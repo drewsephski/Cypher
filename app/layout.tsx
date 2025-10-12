@@ -1,13 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "../components/theme-provider"
+import { Toaster } from "../components/ui/sonner"
 import { ReactFlowProvider } from "@xyflow/react"
 import { Suspense } from "react"
 import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
-import Navbar from "@/components/navbar"
+import Navbar from "../components/navbar"
 
 const bricolage = Bricolage_Grotesque({ 
   subsets: ['latin'],
@@ -65,7 +65,7 @@ export default function RootLayout({
       <body className={`font-sans ${bricolage.variable} antialiased bg-background`}>
         <Suspense fallback={null}>
           <ReactFlowProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
               <Navbar />
               {children}
               <Toaster />
