@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { cubicBezier, HTMLMotionProps, motion, useInView } from 'motion/react';
+import { cubicBezier, HTMLMotionProps, motion, useInView } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 
 export interface OrbitingCirclesProps extends HTMLMotionProps<'div'> {
@@ -46,6 +46,7 @@ export function OrbitingCircles({
       setShouldAnimate(false);
     }
   }, [isInView]);
+
   return (
     <>
       {path && (
@@ -53,15 +54,15 @@ export function OrbitingCircles({
           {shouldAnimate && (
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              animate={{ scale: 1, opacity: 0.4 }}
               transition={{
-                duration: 0.8,
+                duration: 1,
                 ease: [0.23, 1, 0.32, 1],
-                delay: index * 0.2 + startAnimationDelay,
+                delay: index * 0.15 + startAnimationDelay,
                 type: 'spring',
-                stiffness: 120,
-                damping: 18,
-                mass: 1,
+                stiffness: 100,
+                damping: 20,
+                mass: 1.2,
               }}
               className="pointer-events-none absolute inset-0"
               style={{
@@ -74,9 +75,9 @@ export function OrbitingCircles({
               <div
                 className={cn(
                   'size-full rounded-full',
-                  'border border-[0,0,0,0.07] dark:border-[rgba(249,250,251,0.07)]',
-                  'bg-gradient-to-b from-[rgba(0,0,0,0.05)] from-0% via-[rgba(249,250,251,0.00)] via-54.76%',
-                  'dark:bg-gradient-to-b dark:from-[rgba(249,250,251,0.03)] dark:from-0% dark:via-[rgba(249,250,251,0.00)] dark:via-54.76%',
+                  'border border-neutral-700/50 dark:border-neutral-700/50',
+                  'bg-gradient-to-b from-neutral-800/20 via-transparent to-transparent',
+                  'shadow-[0_0_20px_rgba(0,0,0,0.3)]',
                   className,
                 )}
               />
@@ -85,8 +86,8 @@ export function OrbitingCircles({
         </motion.div>
       )}
       {shouldAnimate &&
-        React.Children.map(children, (child, index) => {
-          const angle = (360 / React.Children.count(children)) * index;
+        React.Children.map(children, (child, childIndex) => {
+          const angle = (360 / React.Children.count(children)) * childIndex;
           return (
             <div
               style={
@@ -103,17 +104,17 @@ export function OrbitingCircles({
               )}
             >
               <motion.div
-                key={`orbit-child-${index}`}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                key={`orbit-child-${childIndex}`}
+                initial={{ scale: 0, opacity: 0, rotate: -180 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{
-                  duration: 0.5,
-                  delay: 0.6 + index * 0.2 + startAnimationDelay,
-                  ease: cubicBezier(0, 0, 0.58, 1),
+                  duration: 0.6,
+                  delay: 0.5 + childIndex * 0.1 + startAnimationDelay,
+                  ease: cubicBezier(0.34, 1.56, 0.64, 1),
                   type: 'spring',
-                  stiffness: 120,
-                  damping: 18,
-                  mass: 1,
+                  stiffness: 150,
+                  damping: 15,
+                  mass: 0.8,
                 }}
                 {...props}
               >

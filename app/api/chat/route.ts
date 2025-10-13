@@ -2,6 +2,7 @@ import { streamText, tool } from "ai"
 import { google } from "@ai-sdk/google"
 import { openai } from "@ai-sdk/openai"
 import { browseTool } from "../../../lib/tools/browseTool"
+import { validateCode } from "@/lib/utils/validateCode"
 
 // Handle analysis requests for contextual documentation analysis
 async function handleAnalysisRequest(messages: any[]) {
@@ -107,6 +108,174 @@ export async function POST(req: Request) {
 
     console.log('Transformed messages:', aiMessages) // Debug log
 
+    // Track token usage
+    let inputTokens = 0
+    let outputTokens = 0
+    let reasoningTokens = 0
+    let cachedInputTokens = 0
+
+    // Estimate tokens for the current request
+    const estimateTokens = (text: string) => {
+      // Rough estimation: 4 characters ≈ 1 token for English text
+      return Math.ceil(text.length / 4)
+    }
+
+    // Calculate input tokens from messages
+    aiMessages.forEach((msg: any) => {
+      inputTokens += estimateTokens(msg.content || '')
+    })
+
+    // Add validation rules to the system message
+    const validationRules = `
+## 🔍 CODE VALIDATION RULES
+
+Your generated code MUST pass these validation rules:
+
+1. **No React Imports**
+   - ❌ BAD: \`import React from 'react'\`
+   - ✅ GOOD: Omit the import (React is globally available)
+
+2. **Advanced Inline SVGs - No External Images**
+   - ❌ BAD: \`<img src="/icon.svg" />\`, \`<img src="https://unsplash.com/..." />\`, or any external image source
+   - ❌ BAD: \`import icon from './icon.svg'\` or any image imports
+   - ✅ GOOD: Create visually rich SVGs with these advanced techniques:
+     \`\`\`jsx
+     <svg 
+       width="200" 
+       height="200" 
+       viewBox="0 0 200 200"
+       className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 p-4 backdrop-blur-sm transition-all hover:scale-[1.02]"
+       aria-label="Descriptive label for screen readers"
+       role="img"
+     >
+       {/* Background elements */}
+       <defs>
+         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+           <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+           <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.2" />
+         </linearGradient>
+         <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+           <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" className="opacity-10" />
+         </pattern>
+       </defs>
+
+       {/* Grid background */}
+       <rect width="100%" height="100%" fill="url(#grid)" />
+       
+       {/* Main shape with gradient */}
+       <rect 
+         x="20" y="20" 
+         width="160" height="160" 
+         rx="16" 
+         fill="url(#gradient)"
+         className="transition-all duration-300 group-hover:opacity-90"
+       />
+
+       {/* Decorative elements */}
+       <circle 
+         cx="50" cy="50" 
+         r="30" 
+         fill="hsl(var(--primary))" 
+         opacity="0.2"
+         className="transition-all duration-500 group-hover:opacity-40 group-hover:translate-x-4"
+       />
+
+       {/* Main icon/content */}
+       <g className="origin-center transition-transform duration-300 group-hover:scale-110">
+         <path 
+           d="M100 40L120 80L160 90L130 120L140 160L100 140L60 160L70 120L40 90L80 80L100 40Z" 
+           fill="hsl(var(--primary))"
+           stroke="hsl(var(--primary))"
+           strokeWidth="2"
+           strokeLinejoin="round"
+           className="drop-shadow-lg"
+         />
+       </g>
+
+       {/* Animated elements */}
+       <circle 
+         cx="150" 
+         cy="150" 
+         r="5" 
+         fill="hsl(var(--accent))"
+         className="animate-pulse"
+       >
+         <animate 
+           attributeName="r" 
+           values="5;8;5" 
+           dur="2s" 
+           repeatCount="indefinite"
+         />
+       </circle>
+     </svg>
+     \`\`\`
+
+   ### Advanced SVG Techniques to Use:
+   - **Gradients & Patterns**: Use \`<linearGradient>\`, \`<radialGradient>\`, and \`<pattern>\` for rich backgrounds
+   - **Transforms**: Apply transforms like \`scale\`, \`rotate\`, and \`translate\` for dynamic effects
+   - **Animations**: Use \`<animate>\` or CSS animations for subtle motion effects
+   - **Filters**: Apply \`<filter>\` for effects like blur, drop shadows, and color manipulation
+   - **Responsive Design**: Use \`viewBox\` and percentage-based units for responsive SVGs
+   - **Accessibility**: Always include proper \`aria-*\` attributes and semantic structure
+   - **Performance**: Optimize paths and minimize DOM nodes for better performance
+   - **Interactivity**: Use CSS hover/focus states and JavaScript for interactive elements
+   - **Theming**: Leverage CSS variables for dynamic theming (e.g., \`hsl(var(--primary))\`)
+
+   ### Best Practices:
+   - Use semantic IDs and classes for styling and scripting
+   - Group related elements with \`<g>\` tags
+   - Keep the SVG DOM structure clean and organized
+   - Use proper viewBox and preserveAspectRatio for responsive behavior
+   - Optimize paths and remove unnecessary attributes
+   - Add proper metadata and descriptions for accessibility
+   - Test across different browsers and devices
+
+   ### For Icons:
+   - Use the project's icon components when available
+   - For custom icons, create them as React components with proper props
+   - Ensure proper sizing and alignment with the design system
+   - Use \`currentColor\` for fill/stroke to inherit from parent text color
+
+   ### For Placeholders/Illustrations:
+   - Create custom SVG illustrations using paths and shapes
+   - Use the project's color scheme and design tokens
+   - Add subtle animations for better user experience
+   - Ensure they work in both light and dark modes
+
+   ### Never Use:
+   - External image sources (Unsplash, Pexels, etc.)
+   - Base64-encoded images
+   - Icon/image imports
+   - Non-optimized SVGs with unnecessary metadata
+   - Inline styles when CSS classes can be used instead
+   - Fixed dimensions without proper viewBox
+   - Complex SVGs when a simpler solution would suffice
+
+   Remember: The goal is to create beautiful, performant, and accessible SVGs that enhance the user experience while maintaining code quality and consistency with the project's design system.
+
+3. **Accessibility**
+   - Always include \`aria-label\` or \`aria-labelledby\`
+   - Add \`role="img"\` to SVGs
+   - Use semantic HTML elements
+
+4. **Error Handling**
+   - Check for undefined/null before accessing properties
+   - Use optional chaining (\`?.\`) for nested properties
+   - Handle loading and error states
+
+Your code will be automatically validated. Fix any errors before submitting.
+`;
+
+    // Add validation rules to the system message
+    if (aiMessages[0]?.role === 'system') {
+      aiMessages[0].content += validationRules;
+    } else {
+      aiMessages.unshift({
+        role: 'system',
+        content: validationRules
+      });
+    }
+
     if (aiMessages.length === 0) {
       return new Response('No valid messages provided', { status: 400 })
     }
@@ -175,7 +344,7 @@ ${documentationContext}
 
 ## 🎯 OUTPUT FORMAT RULES
 
-**CRITICAL:** Your response must contain ONLY the component code. Do not import React or any other libraries.
+**CRITICAL:** Your response must contain ONLY the component code. You must follow the users instructions exactly. Do not import React or any other libraries.
 
 ### Structure:
 
@@ -188,13 +357,14 @@ window.default = ComponentName;
 \`\`\`
 
 ### Forbidden:
-- React imports
+- React imports (React is globally available)
 - No markdown code blocks (\`\`\`jsx or \`\`\`javascript)
 - No explanatory text before or after code
 - No "Here's the component..." or similar phrases
 - No import statements (React is globally available)
 - No TypeScript syntax (interface, type, etc.)
 - No external assets (fonts, images, stylesheets)
+- No external SVG files (use inline SVGs instead)
 
 ## 🔧 TECHNICAL REQUIREMENTS
 
@@ -206,46 +376,118 @@ window.default = ComponentName;
 
 ### React Patterns
 - Use React hooks (useState, useEffect, etc.) - available globally
-- Do NOT import React, it's already available globally
+- Do NOT import React or any React dependencies (they are globally available)
 - Implement proper state management
 - Add event handlers (onClick, onChange, etc.)
 - Include loading and error states
 - Use conditional rendering effectively
 
-### Error Prevention
-- **Safe Property Access**: Always check if objects exist before accessing nested properties
-- **Image URL Handling**: Never assume images exist - use conditional rendering and fallbacks
+## 🚫 IMPORTANT: MOCK DATA POLICY
 
-**❌ DON'T DO THIS:**
+**CRITICAL REQUIREMENT:** All components MUST use MOCK DATA and SIMULATED API calls. Never attempt to call real APIs, make HTTP requests, or access external services.
+
+### Why Mock Data?
+- **Reliability**: No dependency on external services that might fail
+- **Consistency**: Predictable behavior for demos and testing
+- **Privacy**: No real user data or API keys needed
+- **Performance**: No network delays or rate limiting issues
+- **Offline capability**: Works without internet connection
+
+### Mock Data Implementation Rules:
+1. **Use setTimeout()** to simulate async operations (500-1500ms delays)
+2. **Create realistic data structures** based on API documentation
+3. **Include all states**: loading, success, error, empty results
+4. **Add toggle buttons** for demo purposes (success/error states)
+5. **Use proper error handling** with retry functionality
+6. **Add loading skeletons** during simulated fetches
+7. **Comment integration points** where real APIs would connect
+
+### ❌ FORBIDDEN (Never Do):
+- \`fetch()\` calls to real endpoints
+- \`axios\` or HTTP client imports
+- Real API keys or authentication
+- External service integrations
+- Network-dependent functionality
+
+### ✅ REQUIRED (Always Do):
+- Mock all data with \`setTimeout()\` simulations
+- Use hardcoded arrays/objects for data
+- Implement manual state management
+- Add error simulation with toggle buttons
+- Include loading states and skeletons
+
+**Example Mock Implementation:**
 \`\`\`javascript
-// This will cause "Cannot read properties of undefined" errors
-<img src={item.imageUrl} alt={item.name} />
-<div>{user.profile.imageUrl}</div>
+const [users, setUsers] = useState([]);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+
+const fetchUsers = async () => {
+  setLoading(true);
+  setError(null);
+
+  // Simulate API call with mock data
+  setTimeout(() => {
+    try {
+      // Mock successful response
+      setUsers([
+        { id: 1, name: 'John Doe', email: 'john@example.com' },
+        { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+      ]);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to load users');
+      setLoading(false);
+    }
+  }, 800); // Simulate network delay
+};
 \`\`\`
 
-**✅ DO THIS INSTEAD:**
+### Image and Icon Handling
+- **ALWAYS use inline SVGs** for all images, icons, and illustrations
+- For user-requested images, generate a relevant SVG illustration instead of using external images
+- Include proper accessibility attributes (role, aria-label, etc.)
+- Optimize SVGs by removing unnecessary attributes and groups
+- Use viewBox and preserveAspectRatio for proper scaling
+- For icons, use a consistent size (e.g., 24x24, 20x20) and color scheme
+- For complex illustrations, use simple geometric shapes and paths
+- If a photo is requested, create a stylized SVG representation instead
+
+**✅ GOOD (Inline SVG):**
 \`\`\`javascript
-// Safe property access with conditional rendering
-{item?.imageUrl && (
-  <img src={item.imageUrl} alt={item.name || 'Item'} />
-)}
+function Icon() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-label="User icon"
+      role="img"
+    >
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  )
+}
+\`\`\`
 
-// Multiple fallback options
-<img
-  src={item?.imageUrl || user?.profile?.imageUrl || '/placeholder-image.png'}
-  alt={item?.name || 'Default alt text'}
-/>
-
-// Safe object destructuring
-const { imageUrl, name } = item || {}
-if (imageUrl) {
-  return <img src={imageUrl} alt={name || 'Image'} />
+**❌ BAD (External SVG):**
+\`\`\`javascript
+// Don't do this
+function Icon() {
+  return <img src="/user-icon.svg" alt="User" />;
 }
 \`\`\`
 
 ### Error Prevention
 - **Safe Property Access**: Always check if objects exist before accessing nested properties
 - **Image URL Handling**: Never assume images exist - use conditional rendering and fallbacks
+- **SVG Handling**: Always use inline SVGs with proper accessibility attributes
 
 **❌ DON'T DO THIS:**
 \`\`\`javascript
@@ -387,7 +629,7 @@ className="bg-muted animate-pulse rounded-md h-4 w-full"
 Before generating, ensure:
 - [ ] Pure code output only (no explanations)
 - [ ] Function declaration syntax used
-- [ ] Mock data implementation (no real API calls)
+- [ ] **Mock data implementation (no real API calls)**
 - [ ] All three states: loading, success, error
 - [ ] Origin UI color system applied
 - [ ] Interactive functionality (buttons work, state updates)
@@ -395,7 +637,7 @@ Before generating, ensure:
 - [ ] Accessibility (ARIA labels, semantic HTML, keyboard navigation)
 - [ ] Proper error handling with user feedback
 - [ ] Loading states with skeletons or spinners
-- [ ] Comments indicating API integration points
+- [ ] **Comments indicating API integration points**
 - [ ] Ends with \`window.default = ComponentName;\`
 
 ## 💡 EXAMPLE STRUCTURE
@@ -520,7 +762,7 @@ function PricingComponent() {
 window.default = PricingComponent;
 \`\`\`
 
-Remember: Output ONLY the component code. Nothing else.`
+Remember: Output ONLY the component code. Nothing else. **CRITICAL: Do not import from React and always use mock data - never make real API calls.**`
       : `# React Component Generator
 
 You are a specialized AI that generates production-ready React components using the Origin UI design system and Tailwind CSS. Your output must be PURE CODE ONLY.
@@ -616,6 +858,7 @@ className="bg-secondary text-secondary-foreground px-2 py-1
 
 - [ ] Pure code output only
 - [ ] Function declaration syntax
+- [ ] **Mock data implementation (no real API calls)**
 - [ ] Origin UI color system
 - [ ] Interactive functionality
 - [ ] Responsive design
@@ -624,7 +867,7 @@ className="bg-secondary text-secondary-foreground px-2 py-1
 - [ ] Proper state management
 - [ ] Ends with \`window.default = ComponentName;\`
 
-Remember: Output ONLY the component code. Nothing else.`
+Remember: Output ONLY the component code. Nothing else. **CRITICAL: Always use mock data - never make real API calls.**`
 
     const result = await streamText({
       model: google("gemini-2.0-flash-lite"),
