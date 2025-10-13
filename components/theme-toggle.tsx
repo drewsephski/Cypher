@@ -1,58 +1,85 @@
 "use client"
 
-import { useTheme } from "next-themes"
-import { MoonIcon, SunIcon } from "lucide-react"
-import { Toggle } from "@/components/origin-ui/toggle"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { Moon, Sun } from "lucide-react"
+import { flushSync } from "react-dom"
 
-export default function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+import { cn } from "@/lib/utils"
 
-  // Only render after mounting to avoid hydration mismatch
+interface AnimatedThemeTogglerProps
+  extends React.ComponentPropsWithoutRef<"button"> {
+  duration?: number
+}
+
+export const AnimatedThemeToggler = ({
+  className,
+  duration = 400,
+  ...props
+}: AnimatedThemeTogglerProps) => {
+  const [isDark, setIsDark] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
   useEffect(() => {
-    setMounted(true)
+    const updateTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"))
+    }
+
+    updateTheme()
+
+    const observer = new MutationObserver(updateTheme)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    })
+
+    return () => observer.disconnect()
   }, [])
 
-  if (!mounted) {
-    return (
-      <Toggle
-        variant="outline"
-        className="group data-[state=on]:hover:bg-muted size-9 data-[state=on]:bg-transparent"
-        pressed={false}
-        disabled
-        aria-label="Loading theme toggle"
-      >
-        <SunIcon
-          size={16}
-          className="shrink-0"
-          aria-hidden="true"
-        />
-      </Toggle>
-    )
-  }
+  const toggleTheme = useCallback(async () => {
+    if (!buttonRef.current) return
 
-  const isDark = resolvedTheme === "dark"
+    await document.startViewTransition(() => {
+      flushSync(() => {
+        const newTheme = !isDark
+        setIsDark(newTheme)
+        document.documentElement.classList.toggle("dark")
+        localStorage.setItem("theme", newTheme ? "dark" : "light")
+      })
+    }).ready
+
+    const { top, left, width, height } =
+      buttonRef.current.getBoundingClientRect()
+    const x = left + width / 2
+    const y = top + height / 2
+    const maxRadius = Math.hypot(
+      Math.max(left, window.innerWidth - left),
+      Math.max(top, window.innerHeight - top)
+    )
+
+    document.documentElement.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${maxRadius}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration,
+        easing: "ease-in-out",
+        pseudoElement: "::view-transition-new(root)",
+      }
+    )
+  }, [isDark, duration])
 
   return (
-    <Toggle
-      variant="outline"
-      className="group data-[state=on]:hover:bg-muted size-9 data-[state=on]:bg-transparent"
-      pressed={isDark}
-      onPressedChange={(pressed) => setTheme(pressed ? "dark" : "light")}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+    <button
+      ref={buttonRef}
+      onClick={toggleTheme}
+      className={cn(className)}
+      {...props}
     >
-      {/* Icons with proper dark/light mode transitions */}
-      <MoonIcon
-        size={16}
-        className="shrink-0 scale-0 opacity-0 transition-all group-data-[state=on]:scale-100 group-data-[state=on]:opacity-100"
-        aria-hidden="true"
-      />
-      <SunIcon
-        size={16}
-        className="absolute shrink-0 scale-100 opacity-100 transition-all group-data-[state=on]:scale-0 group-data-[state=on]:opacity-0"
-        aria-hidden="true"
-      />
-    </Toggle>
+      {isDark ? <Sun /> : <Moon />}
+      <span className="sr-only">Toggle theme</span>
+    </button>
   )
 }

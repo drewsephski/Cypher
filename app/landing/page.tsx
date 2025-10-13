@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Spline from '@splinetool/react-spline';
 import { Application } from '@splinetool/runtime';
+import DarkGrid from "@/components/ui/dark-grid";
 
 // Tech Modal Component
 function TechModal({ tech, isOpen, onClose }: { tech: string | null; isOpen: boolean; onClose: () => void }) {
@@ -303,7 +304,7 @@ export default function LandingPage() {
         </div>
       </section>
       <BentoSection />
-
+      <DarkGrid />
       {/* CTA Section */}
       <section className="container-responsive py-20 relative" style={{ zIndex: 10, pointerEvents: 'auto' }}>
         <Card className="mb-24 p-12 md:p-20 text-center bg-gradient-to-br from-primary/5 via-primary/3 to-primary/8 border-primary/20 shadow-lg animate-slide-up backdrop-blur-sm relative" style={{ zIndex: 10 }}>

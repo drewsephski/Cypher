@@ -36,7 +36,7 @@ export function BentoSection() {
       style={{ zIndex: 10, pointerEvents: 'auto' }}
     >
       <div className="relative w-full px-6">
-        <div className="max-w-6xl mx-auto border-l border-r border-border/50 bg-gradient-to-b from-background/60 via-background/80 to-background/60 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto border-l border-r border-border/50 backdrop-blur-sm">
           <SectionHeader>
             <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance pb-1 text-foreground">
               Build React Components with AI in 3 Simple Steps

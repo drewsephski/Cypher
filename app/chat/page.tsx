@@ -13,12 +13,9 @@ import { oneDark } from "@codemirror/theme-one-dark"
 import { EditorView } from "@codemirror/view"
 import { useTheme } from "next-themes"
 import { SandboxedPreview } from "../../components/sandboxed-preview"
-import Navbar from "../../components/navbar"
 import ReactMarkdown from "react-markdown"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneDark as syntaxOneDark, oneLight as syntaxOneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
-import Link from "next/link"
-import ThemeToggle from "../../components/theme-toggle"
 import { toast } from "sonner"
 import { Conversation, ConversationContent, ConversationEmptyState, ConversationScrollButton } from "../../components/ai-elements/conversation"
 import { Message, MessageContent, MessageAvatar } from "../../components/ai-elements/message"
@@ -1300,39 +1297,13 @@ export default ${componentName}
             <h3 className="text-sm font-medium text-muted-foreground mb-3">Try these examples:</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <button
-                onClick={() => setInput("A modern dashboard card with metrics, a chart, and quick actions")}
-                className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
-              >
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-medium text-foreground">Analytics Card</div>
-                    <div className="text-xs text-muted-foreground">Metrics & charts</div>
-                  </div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setInput("A sleek product card with image, title, description, and add to cart button")}
-                className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
-              >
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-medium text-foreground">Product Card</div>
-                    <div className="text-xs text-muted-foreground">E-commerce ready</div>
-                  </div>
-                </div>
-              </button>
-
-              <button
                 onClick={() => setInput("Make me a blog app that has a few blogs there for people to read. Users can click into the blogs and read them, then go back to the homepage to see more.")}
                 className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
               >
                 <div className="flex items-start gap-2">
                   <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
                   <div>
-                    <div className="font-medium text-foreground">Blog Application</div>
+                    <div className="font-medium text-foreground">Blog App</div>
                     <div className="text-xs text-muted-foreground">Browse & read posts</div>
                   </div>
                 </div>
@@ -1352,27 +1323,53 @@ export default ${componentName}
               </button>
 
               <button
-                onClick={() => setInput("A weather dashboard that shows current mock weather conditions, 5-day forecast, and temperature alerts")}
+                onClick={() => setInput("A modern hero section with a compelling headline, subheadline, call-to-action buttons, and a visual element like an illustration or image")}
                 className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
               >
                 <div className="flex items-start gap-2">
                   <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
                   <div>
-                    <div className="font-medium text-foreground">Weather Dashboard</div>
-                    <div className="text-xs text-muted-foreground">Current & forecast</div>
+                    <div className="font-medium text-foreground">Hero Section</div>
+                    <div className="text-xs text-muted-foreground">Engaging first impression</div>
                   </div>
                 </div>
               </button>
 
               <button
-                onClick={() => setInput("A social media feed component with posts, likes, comments, and tech related content in English")}
+                onClick={() => setInput("A sleek product card with image, title, description, and add to cart button")}
                 className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
               >
                 <div className="flex items-start gap-2">
                   <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
                   <div>
-                    <div className="font-medium text-foreground">Social Feed</div>
-                    <div className="text-xs text-muted-foreground">Posts & interactions</div>
+                    <div className="font-medium text-foreground">Product Card</div>
+                    <div className="text-xs text-muted-foreground">E-commerce ready</div>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setInput("A modern Bento grid layout with multiple card sizes, interactive hover effects, and responsive design for showcasing different content types")}
+                className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
+              >
+                <div className="flex items-start gap-2">
+                  <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-medium text-foreground">Bento Grid</div>
+                    <div className="text-xs text-muted-foreground">Modern layout showcase</div>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setInput("A feature highlights section with icons, engaging descriptions, and visual elements to showcase key product benefits or features in an attractive way")}
+                className="p-3 text-left rounded-lg border border-border/30 hover:border-orange-400/50 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-colors text-sm"
+              >
+                <div className="flex items-start gap-2">
+                  <div className="w-2 h-2 mt-1.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-medium text-foreground">Feature Showcase</div>
+                    <div className="text-xs text-muted-foreground">Highlight benefits</div>
                   </div>
                 </div>
               </button>

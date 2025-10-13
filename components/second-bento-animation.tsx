@@ -23,13 +23,42 @@ export default function SecondBentoAnimation() {
   }, [isInView]);
 
   return (
-    <div ref={ref} className="relative flex h-full w-full items-center justify-center overflow-visible bg-background dark:bg-card">
-      {/* Gradient overlays */}
-      <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-t from-background dark:from-card via-background/90 dark:via-card/90 to-transparent"></div>
-      <div className="pointer-events-none absolute top-0 left-0 h-40 w-full bg-gradient-to-b from-background dark:from-card via-background/90 dark:via-card/90 to-transparent"></div>
+    <div ref={ref} className="relative flex h-full w-full items-center justify-center overflow-visible bg-white dark:bg-gradient-to-br dark:from-neutral-900 dark:to-neutral-950">
+      {/* Gradient overlays - Dark mode only */}
+      <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full dark:bg-gradient-to-t dark:from-neutral-950 dark:to-transparent"></div>
+      <div className="pointer-events-none absolute top-0 left-0 h-40 w-full dark:bg-gradient-to-b dark:from-neutral-950 dark:to-transparent"></div>
       
-      {/* Subtle center glow */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-muted/10 dark:from-muted/5 via-transparent to-transparent"></div>
+      {/* Subtle center glow - Dark mode only */}
+      <div className="pointer-events-none absolute inset-0 dark:bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] dark:from-neutral-500/5 dark:via-transparent dark:to-transparent"></div>
+      
+      {/* Ambient effects - Dark mode only */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden dark:block hidden">
+        <motion.div 
+          className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-neutral-600/10 blur-[120px] rounded-full"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/3 right-1/4 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-neutral-700/8 blur-[100px] rounded-full"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+      </div>
 
       <motion.div 
         className="relative flex h-full w-full items-center justify-center overflow-visible min-h-[800px] min-w-[800px]"
@@ -53,21 +82,21 @@ export default function SecondBentoAnimation() {
               initial={{ scale: 0, opacity: 0 }}
               animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              className="size-10 bg-white/90 dark:bg-neutral-900/70 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-200/80 dark:border-neutral-800/70 cursor-pointer group relative shadow-sm shadow-neutral-200/50 dark:shadow-neutral-900/20 transition-all duration-300 hover:border-neutral-300/80 dark:hover:border-neutral-700/80 hover:shadow-md hover:shadow-neutral-300/50 dark:hover:shadow-neutral-900/30"
               whileHover={{
-                scale: [1, 1.08, 1.04],
+                scale: 1.1,
                 rotate: [0, 2, -2, 0],
-                transition: { duration: 0.8, ease: "easeInOut" }
+                transition: { duration: 0.3, ease: "easeInOut" }
               }}
               whileTap={{ scale: 0.95 }}
             >
               <motion.div
-                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-600/20 via-neutral-700/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 whileHover={{
                   background: [
-                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
-                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
-                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(100, 100, 100, 0.15) 0%, rgba(100, 100, 100, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(120, 120, 120, 0.2) 0%, rgba(100, 100, 100, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(100, 100, 100, 0.15) 0%, rgba(100, 100, 100, 0) 70%)",
                   ],
                   scale: [1, 1.05, 1],
                 }}

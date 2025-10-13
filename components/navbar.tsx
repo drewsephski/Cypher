@@ -2,7 +2,7 @@
 import { Button } from "@/components/origin-ui/button"
 import { Github } from "lucide-react"
 import Link from "next/link"
-import ThemeToggle from "@/components/theme-toggle"
+import { AnimatedThemeToggler } from "@/components/theme-toggle"
 
 export default function Navbar() {
   return (
@@ -24,7 +24,7 @@ export default function Navbar() {
               <Github className="w-4 h-4" />
             </Link>
           </Button>
-          <ThemeToggle />
+          <AnimatedThemeToggler />
         </div>
       </div>
     </header>

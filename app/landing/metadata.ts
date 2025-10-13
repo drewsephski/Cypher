@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
-const title = 'AI-Powered React Components | Your App Name';
+const title = 'AI-Powered React Components | Cypher';
 const description = 'Generate production-ready React components in seconds with AI. Chat, browse docs, and get clean, typed code with live previews.';
-const url = 'https://yourapp.com';
+const url = 'https://cypher.dev';
 
 export const metadata: Metadata = {
   title,
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     title,
     description,
     url,
-    siteName: 'Your App Name',
+    siteName: 'Cypher',
     images: [
       {
         url: '/og-image.png',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title,
     description,
-    creator: '@yourtwitter',
+    creator: '@cypherdev',
     images: ['/og-image.png'],
   },
   robots: {
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     maximumScale: 5,
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: 'your-google-site-verification-code',
     yandex: 'your-yandex-verification-code',
   },
   alternates: {
