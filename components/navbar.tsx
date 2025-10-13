@@ -21,10 +21,10 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" asChild className="hover:bg-accent/50 transition-colors">
             <Link href="https://github.com/drewsephski" target="_blank">
-              <Github className="w-4 h-4" />
+              <Github className="w-5 h-5" />
             </Link>
           </Button>
-          <AnimatedThemeToggler />
+          <AnimatedThemeToggler className="cursor-pointer" />
         </div>
       </div>
     </header>
