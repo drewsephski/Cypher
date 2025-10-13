@@ -3,10 +3,10 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import { OrbitingCircles } from '@/components/ui/orbitting-circles';
-import { Monitor, Smartphone, Wifi, Shield, Zap, Cloud, Github, Terminal, Database, Server, Bot, Cpu, Router, Layers, Code, Braces, Lock, Blocks, GitBranch, Workflow, PackageCheck, Globe } from 'lucide-react';
+import { Monitor, Smartphone, Wifi, Shield, Zap, Cloud, Github, Terminal, Database, Server, Bot, Cpu, Router, Layers, Code, Braces, Lock, Blocks, GitBranch, Workflow, PackageCheck, Globe, Heart, Star, Sparkles, Moon, Sun, Eye, Camera, Music, Headphones, Gamepad2, Palette, Coffee, Leaf } from 'lucide-react';
 
 export default function SecondBentoAnimation() {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
   const [animate, setAnimate] = useState(false);
 
@@ -23,96 +23,218 @@ export default function SecondBentoAnimation() {
   }, [isInView]);
 
   return (
-    <div ref={ref} className="relative flex h-full w-full items-center justify-center overflow-hidden bg-neutral-950">
-      {/* Enhanced gradients with glow effects */}
-      <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-t from-neutral-950 via-neutral-950/90 to-transparent"></div>
-      <div className="pointer-events-none absolute top-0 left-0 h-40 w-full bg-gradient-to-b from-neutral-950 via-neutral-950/90 to-transparent"></div>
+    <div ref={ref} className="relative flex h-full w-full items-center justify-center overflow-visible bg-background dark:bg-card">
+      {/* Gradient overlays */}
+      <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full bg-gradient-to-t from-background dark:from-card via-background/90 dark:via-card/90 to-transparent"></div>
+      <div className="pointer-events-none absolute top-0 left-0 h-40 w-full bg-gradient-to-b from-background dark:from-card via-background/90 dark:via-card/90 to-transparent"></div>
       
-      {/* Subtle radial glow in center */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/10 via-transparent to-transparent"></div>
+      {/* Subtle center glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-muted/10 dark:from-muted/5 via-transparent to-transparent"></div>
 
       <motion.div 
-        className="relative flex h-full w-full items-center justify-center overflow-hidden"
+        className="relative flex h-full w-full items-center justify-center overflow-visible min-h-[800px] min-w-[800px]"
         initial={{ opacity: 0 }}
         animate={{ opacity: animate ? 1 : 0 }}
         transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <div className="relative flex h-full w-full items-center justify-center translate-y-0 md:translate-y-32">
+        <div className="relative flex h-full w-full items-center justify-center translate-y-0 md:translate-y-16">
           
           {/* Innermost Ring - 8 icons */}
           <OrbitingCircles
             index={0}
             iconSize={52}
-            radius={130}
+            radius={170}  // Increased from 150
             reverse
-            speed={1.2}
+            speed={0.06}
             startAnimationDelay={0}
             once={false}
           >
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{
+                scale: [1, 1.08, 1.04],
+                rotate: [0, 2, -2, 0],
+                transition: { duration: 0.8, ease: "easeInOut" }
+              }}
               whileTap={{ scale: 0.95 }}
             >
-              <Terminal className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ],
+                  scale: [1, 1.05, 1],
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Terminal className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{
+                scale: [1, 1.06, 1.02],
+                rotate: [0, -1.5, 1.5, 0],
+                transition: { duration: 0.9, ease: "easeInOut" }
+              }}
               whileTap={{ scale: 0.95 }}
             >
-              <Code className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Code className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{
+                scale: [1, 1.07, 1.03],
+                rotate: [0, 3, -1.5, 0],
+                transition: { duration: 0.85, ease: "easeInOut" }
+              }}
               whileTap={{ scale: 0.95 }}
             >
-              <Database className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Database className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.25 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{
+                scale: [1, 1.05, 1.02],
+                rotate: [0, -2.5, 2.5, 0],
+                transition: { duration: 0.95, ease: "easeInOut" }
+              }}
               whileTap={{ scale: 0.95 }}
             >
-              <Server className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Server className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Cpu className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Cpu className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.35 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Router className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Router className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Workflow className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Workflow className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
             <motion.div 
-              className="size-10 bg-neutral-800/90 rounded-full flex items-center justify-center border border-neutral-700/70 hover:border-neutral-500/90 hover:bg-neutral-700/95 hover:shadow-lg hover:shadow-neutral-700/50 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.15, rotate: 5 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.45 }}
+              className="size-10 bg-neutral-900/60 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 cursor-pointer group relative"
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Blocks className="size-5 text-neutral-100 group-hover:text-white transition-colors" strokeWidth={2} />
+              <motion.div
+                className="absolute inset-0 rounded-full bg-gradient-to-br from-neutral-700/0 to-neutral-700/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{
+                  background: [
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.1) 0%, rgba(115, 115, 115, 0) 70%)",
+                    "radial-gradient(circle at 50% 50%, rgba(115, 115, 115, 0.15) 0%, rgba(115, 115, 115, 0) 70%)",
+                  ]
+                }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
+              />
+              <Blocks className="size-5 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
           </OrbitingCircles>
 
           {/* Center Icon - Pulsing */}
           <motion.div
-            className="absolute size-20 bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-full flex items-center justify-center border-2 border-neutral-700/80 shadow-xl shadow-neutral-900/50"
+            className="absolute size-20 bg-gradient-to-br from-neutral-900/90 to-neutral-800/90 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/60 shadow-2xl shadow-neutral-950/50"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ 
-              scale: animate ? 1 : 0, 
+              scale: animate ? 1.5 : 0, 
               opacity: animate ? 1 : 0,
             }}
             transition={{ 
@@ -124,17 +246,32 @@ export default function SecondBentoAnimation() {
             }}
           >
             <motion.div
+              className="relative"
               animate={animate ? {
-                scale: [1, 1.05, 1],
-                opacity: [0.7, 1, 0.7],
+                scale: [1, 1.03, 1],
               } : {}}
               transition={{
-                duration: 2,
+                duration: 3,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
             >
-              <Cpu className="size-10 text-neutral-100" strokeWidth={1.5} />
+              <motion.div
+                className="absolute inset-0 rounded-full"
+                animate={{
+                  boxShadow: [
+                    "0 0 20px rgba(115, 115, 115, 0.1)",
+                    "0 0 30px rgba(115, 115, 115, 0.15)",
+                    "0 0 20px rgba(115, 115, 115, 0.1)",
+                  ]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              <Cpu className="size-12 text-neutral-300 relative z-10" strokeWidth={1.5} />
             </motion.div>
           </motion.div>
 
@@ -142,324 +279,321 @@ export default function SecondBentoAnimation() {
           <OrbitingCircles 
             index={1} 
             iconSize={48} 
-            radius={220} 
-            speed={0.8} 
+            radius={120} 
+            speed={0.02} 
             startAnimationDelay={0.1} 
             once={false}
           >
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Github className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <GitBranch className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Cloud className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Shield className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Lock className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Bot className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Zap className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Braces className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Layers className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-9 bg-neutral-800/80 rounded-full flex items-center justify-center border border-neutral-700/60 hover:border-neutral-500/80 hover:bg-neutral-700/90 hover:shadow-md hover:shadow-neutral-700/40 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.12, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <PackageCheck className="size-4 text-neutral-200 group-hover:text-neutral-50 transition-colors" strokeWidth={1.8} />
-            </motion.div>
+            {[
+              { Icon: Github, delay: 0.5 },
+              { Icon: GitBranch, delay: 0.55 },
+              { Icon: Cloud, delay: 0.6 },
+              { Icon: Shield, delay: 0.65 },
+              { Icon: Lock, delay: 0.7 },
+              { Icon: Bot, delay: 0.75 },
+              { Icon: Zap, delay: 0.8 },
+              { Icon: Braces, delay: 0.85 },
+              { Icon: Layers, delay: 0.9 },
+              { Icon: PackageCheck, delay: 0.95 },
+            ].map(({ Icon, delay }, i) => (
+              <motion.div 
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                transition={{ duration: 0.4, delay }}
+                className="size-9 bg-neutral-900/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/50 cursor-pointer group relative overflow-hidden"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-neutral-700/0 via-neutral-600/0 to-neutral-700/0"
+                  initial={{ opacity: 0, rotate: 0 }}
+                  whileHover={{ 
+                    opacity: [0, 0.1, 0],
+                    rotate: 180,
+                  }}
+                  transition={{ duration: 0.8 }}
+                />
+                <Icon className="size-4 text-neutral-400 group-hover:text-neutral-200 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
+              </motion.div>
+            ))}
           </OrbitingCircles>
 
           {/* Third Ring - 12 icons */}
           <OrbitingCircles
             index={2}
             iconSize={44}
-            radius={310}
+            radius={200}
             reverse
-            speed={0.6}
+            speed={0.015}
             startAnimationDelay={0.2}
             once={false}
           >
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Monitor className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Smartphone className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Wifi className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Globe className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Terminal className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Database className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Server className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Code className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Shield className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Router className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Cpu className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 hover:border-neutral-500/70 hover:bg-neutral-700/80 hover:shadow-md hover:shadow-neutral-700/30 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Bot className="size-3.5 text-neutral-300 group-hover:text-neutral-100 transition-colors" strokeWidth={1.8} />
-            </motion.div>
+            {[
+              { Icon: Monitor, delay: 1.0 },
+              { Icon: Smartphone, delay: 1.05 },
+              { Icon: Wifi, delay: 1.1 },
+              { Icon: Globe, delay: 1.15 },
+              { Icon: Terminal, delay: 1.2 },
+              { Icon: Database, delay: 1.25 },
+              { Icon: Server, delay: 1.3 },
+              { Icon: Code, delay: 1.35 },
+              { Icon: Shield, delay: 1.4 },
+              { Icon: Router, delay: 1.45 },
+              { Icon: Cpu, delay: 1.5 },
+              { Icon: Bot, delay: 1.55 },
+            ].map(({ Icon, delay }, i) => (
+              <motion.div 
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                transition={{ duration: 0.4, delay }}
+                className="size-8 bg-neutral-900/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/40 cursor-pointer group relative"
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  className="absolute inset-0 rounded-full border border-neutral-700/0 group-hover:border-neutral-700/30"
+                  whileHover={{
+                    scale: [1, 1.2, 1.1],
+                    opacity: [0, 0.5, 0],
+                  }}
+                  transition={{ duration: 0.5 }}
+                />
+                <Icon className="size-3.5 text-neutral-500 group-hover:text-neutral-300 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
+              </motion.div>
+            ))}
           </OrbitingCircles>
 
           {/* Outermost Ring - 14 icons */}
           <OrbitingCircles
             index={3}
             iconSize={40}
-            radius={400}
-            speed={0.4}
+            radius={240}
+            speed={0.01}
             startAnimationDelay={0.3}
             once={false}
           >
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Github className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Terminal className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Database className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Layers className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Code className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Workflow className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Monitor className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Shield className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Server className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Router className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Bot className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
-            <motion.div 
-              className="size-7 bg-neutral-800/60 rounded-full flex items-center justify-center border border-neutral-700/40 hover:border-neutral-500/60 hover:bg-neutral-700/70 transition-all duration-300 cursor-pointer group"
-              whileHover={{ scale: 1.08, rotate: -5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Wifi className="size-3 text-neutral-400 group-hover:text-neutral-200 transition-colors" strokeWidth={1.8} />
-            </motion.div>
+            {[
+              { Icon: Github, delay: 1.6 },
+              { Icon: Terminal, delay: 1.65 },
+              { Icon: Database, delay: 1.7 },
+              { Icon: Layers, delay: 1.75 },
+              { Icon: Code, delay: 1.8 },
+              { Icon: Workflow, delay: 1.85 },
+              { Icon: Monitor, delay: 1.9 },
+              { Icon: Shield, delay: 1.95 },
+              { Icon: Server, delay: 2.0 },
+              { Icon: Router, delay: 2.05 },
+              { Icon: Bot, delay: 2.1 },
+              { Icon: Wifi, delay: 2.15 },
+              { Icon: Globe, delay: 2.2 },
+              { Icon: Zap, delay: 2.25 },
+            ].map(({ Icon, delay }, i) => (
+              <motion.div 
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                transition={{ duration: 0.4, delay }}
+                className="size-7 bg-neutral-900/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/30 cursor-pointer group relative"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-neutral-800/0 group-hover:bg-neutral-800/10"
+                  transition={{ duration: 0.6 }}
+                />
+                <Icon className="size-3 text-neutral-500 group-hover:text-neutral-300 transition-all duration-300 relative z-10" strokeWidth={1.5} />
+              </motion.div>
+            ))}
           </OrbitingCircles>
+
+          {/* Fifth Ring - 16 icons */}
+          <OrbitingCircles
+            index={4}
+            iconSize={36}
+            radius={220}
+            reverse
+            speed={0.008}
+            startAnimationDelay={0.4}
+            once={false}
+          >
+            {[
+              { Icon: Heart, delay: 2.3 },
+              { Icon: Star, delay: 2.35 },
+              { Icon: Sparkles, delay: 2.4 },
+              { Icon: Moon, delay: 2.45 },
+              { Icon: Sun, delay: 2.5 },
+              { Icon: Eye, delay: 2.55 },
+              { Icon: Camera, delay: 2.6 },
+              { Icon: Music, delay: 2.65 },
+              { Icon: Headphones, delay: 2.7 },
+              { Icon: Gamepad2, delay: 2.75 },
+              { Icon: Palette, delay: 2.8 },
+              { Icon: Coffee, delay: 2.85 },
+              { Icon: Leaf, delay: 2.9 },
+              { Icon: Zap, delay: 2.95 },
+              { Icon: Shield, delay: 3.0 },
+              { Icon: Cloud, delay: 3.05 },
+            ].map(({ Icon, delay }, i) => (
+              <motion.div
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={animate ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                transition={{ duration: 0.4, delay }}
+                className="size-6 bg-neutral-900/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/20 cursor-pointer group relative"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-neutral-800/0 group-hover:bg-neutral-800/15"
+                  whileHover={{
+                    scale: [1, 1.15, 1.05],
+                    opacity: [0, 0.3, 0],
+                  }}
+                  transition={{ duration: 0.6 }}
+                />
+                <Icon className="size-2.5 text-neutral-600 group-hover:text-neutral-400 transition-all duration-300 relative z-10" strokeWidth={1.5} />
+              </motion.div>
+            ))}
+          </OrbitingCircles>
+
         </div>
+
       </motion.div>
 
-      {/* Enhanced floating ambient icons with staggered animations */}
-      <motion.div 
-        className="absolute top-12 left-12 opacity-0 hover:opacity-80 transition-opacity duration-300"
-        initial={{ opacity: 0, scale: 0, y: -20 }}
-        animate={{ opacity: animate ? 0.4 : 0, scale: animate ? 1 : 0, y: animate ? 0 : -20 }}
-        transition={{ duration: 0.6, delay: 0.8, type: "spring", stiffness: 150 }}
-        whileHover={{ scale: 1.2, opacity: 0.8 }}
-      >
-        <div className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 cursor-pointer shadow-lg shadow-neutral-900/30">
-          <Zap className="size-4 text-neutral-300" strokeWidth={1.8} />
-        </div>
-      </motion.div>
+      {/* Floating ambient icons with wave animations */}
+      {[
+        { Icon: Zap, position: "top-12 left-12", delay: 0.4, yOffset: -20, xOffset: -15 },
+        { Icon: Shield, position: "top-8 right-16", delay: 0.8, yOffset: -20, xOffset: 15 },
+        { Icon: Cloud, position: "bottom-16 left-20", delay: 1.2, yOffset: 20, xOffset: -20 },
+        { Icon: Code, position: "bottom-12 right-24", delay: 1.6, yOffset: 20, xOffset: 20 },
+        { Icon: Heart, position: "top-20 left-1/4", delay: 2.0, yOffset: -25, xOffset: -10 },
+        { Icon: Star, position: "bottom-20 right-1/4", delay: 2.4, yOffset: 25, xOffset: 10 },
+        { Icon: Sparkles, position: "top-1/3 left-8", delay: 2.8, yOffset: -15, xOffset: 25 },
+        { Icon: Moon, position: "bottom-1/3 right-8", delay: 3.2, yOffset: 15, xOffset: -25 },
+      ].map(({ Icon, position, delay, yOffset, xOffset }, i) => (
+        <motion.div
+          key={i}
+          className={`absolute ${position} group cursor-pointer`}
+          initial={{ opacity: 0, scale: 0, y: yOffset, x: xOffset }}
+          animate={{
+            opacity: animate ? 0.3 : 0,
+            scale: animate ? 1 : 0,
+            y: animate ? [yOffset, yOffset + 10, yOffset - 10, yOffset] : yOffset,
+            x: animate ? [xOffset, xOffset - 8, xOffset + 8, xOffset] : xOffset
+          }}
+          transition={{
+            duration: 0.4,
+            delay,
+            type: "spring",
+            stiffness: 150,
+            y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+            x: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+          }}
+          whileHover={{ scale: 1.15, opacity: 0.6 }}
+        >
+          <div className="size-8 bg-neutral-900/40 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/40 shadow-lg shadow-neutral-950/30 relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-neutral-700/0 to-neutral-600/0"
+              whileHover={{
+                background: [
+                  "linear-gradient(135deg, rgba(115, 115, 115, 0) 0%, rgba(82, 82, 82, 0) 100%)",
+                  "linear-gradient(135deg, rgba(115, 115, 115, 0.1) 0%, rgba(82, 82, 82, 0.05) 100%)",
+                ]
+              }}
+              transition={{ duration: 0.4 }}
+            />
+            <Icon className="size-4 text-neutral-500 group-hover:text-neutral-300 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
+          </div>
+        </motion.div>
+      ))}
 
-      <motion.div 
-        className="absolute top-8 right-16 opacity-0 hover:opacity-80 transition-opacity duration-300"
-        initial={{ opacity: 0, scale: 0, y: -20 }}
-        animate={{ opacity: animate ? 0.4 : 0, scale: animate ? 1 : 0, y: animate ? 0 : -20 }}
-        transition={{ duration: 0.6, delay: 0.9, type: "spring", stiffness: 150 }}
-        whileHover={{ scale: 1.2, opacity: 0.8 }}
-      >
-        <div className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 cursor-pointer shadow-lg shadow-neutral-900/30">
-          <Shield className="size-4 text-neutral-300" strokeWidth={1.8} />
-        </div>
-      </motion.div>
+      {/* Perimeter wave elements */}
+      {[
+        { Icon: Eye, position: "top-4 left-1/2", delay: 3.6, yOffset: -30, xOffset: 0, waveAmplitude: 15 },
+        { Icon: Camera, position: "bottom-4 left-1/2", delay: 4.0, yOffset: 30, xOffset: 0, waveAmplitude: -15 },
+        { Icon: Music, position: "left-4 top-1/2", delay: 4.4, yOffset: 0, xOffset: -30, waveAmplitude: 20 },
+        { Icon: Headphones, position: "right-4 top-1/2", delay: 4.8, yOffset: 0, xOffset: 30, waveAmplitude: -20 },
+      ].map(({ Icon, position, delay, yOffset, xOffset, waveAmplitude }, i) => (
+        <motion.div
+          key={i}
+          className={`absolute ${position} group cursor-pointer`}
+          initial={{ opacity: 0, scale: 0, y: yOffset, x: xOffset }}
+          animate={{
+            opacity: animate ? 0.2 : 0,
+            scale: animate ? 1 : 0,
+            y: animate ? [yOffset, yOffset + waveAmplitude, yOffset - waveAmplitude * 0.5, yOffset] : yOffset,
+            x: animate ? [xOffset, xOffset + waveAmplitude * 0.7, xOffset - waveAmplitude * 0.3, xOffset] : xOffset
+          }}
+          transition={{
+            duration: 0.5,
+            delay,
+            type: "spring",
+            stiffness: 100,
+            y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+            x: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }
+          }}
+          whileHover={{ scale: 1.2, opacity: 0.5 }}
+        >
+          <div className="size-6 bg-neutral-900/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/30 shadow-lg shadow-neutral-950/20 relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-neutral-700/0 to-neutral-600/0"
+              whileHover={{
+                background: [
+                  "linear-gradient(135deg, rgba(115, 115, 115, 0) 0%, rgba(82, 82, 82, 0) 100%)",
+                  "linear-gradient(135deg, rgba(115, 115, 115, 0.08) 0%, rgba(82, 82, 82, 0.04) 100%)",
+                ]
+              }}
+              transition={{ duration: 0.3 }}
+            />
+            <Icon className="size-3 text-neutral-600 group-hover:text-neutral-400 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
+          </div>
+        </motion.div>
+      ))}
 
-      <motion.div 
-        className="absolute bottom-16 left-20 opacity-0 hover:opacity-80 transition-opacity duration-300"
-        initial={{ opacity: 0, scale: 0, y: 20 }}
-        animate={{ opacity: animate ? 0.4 : 0, scale: animate ? 1 : 0, y: animate ? 0 : 20 }}
-        transition={{ duration: 0.6, delay: 1, type: "spring", stiffness: 150 }}
-        whileHover={{ scale: 1.2, opacity: 0.8 }}
-      >
-        <div className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 cursor-pointer shadow-lg shadow-neutral-900/30">
-          <Cloud className="size-4 text-neutral-300" strokeWidth={1.8} />
-        </div>
-      </motion.div>
-
-      <motion.div 
-        className="absolute bottom-12 right-24 opacity-0 hover:opacity-80 transition-opacity duration-300"
-        initial={{ opacity: 0, scale: 0, y: 20 }}
-        animate={{ opacity: animate ? 0.4 : 0, scale: animate ? 1 : 0, y: animate ? 0 : 20 }}
-        transition={{ duration: 0.6, delay: 1.1, type: "spring", stiffness: 150 }}
-        whileHover={{ scale: 1.2, opacity: 0.8 }}
-      >
-        <div className="size-8 bg-neutral-800/70 rounded-full flex items-center justify-center border border-neutral-700/50 cursor-pointer shadow-lg shadow-neutral-900/30">
-          <Code className="size-4 text-neutral-300" strokeWidth={1.8} />
-        </div>
-      </motion.div>
+      {/* Corner wave particles */}
+      {[
+        { Icon: Gamepad2, position: "top-8 left-8", delay: 5.2, yOffset: -40, xOffset: -40 },
+        { Icon: Palette, position: "top-8 right-8", delay: 5.6, yOffset: -40, xOffset: 40 },
+        { Icon: Coffee, position: "bottom-8 left-8", delay: 6.0, yOffset: 40, xOffset: -40 },
+        { Icon: Leaf, position: "bottom-8 right-8", delay: 6.4, yOffset: 40, xOffset: 40 },
+      ].map(({ Icon, position, delay, yOffset, xOffset }, i) => (
+        <motion.div
+          key={i}
+          className={`absolute ${position} group cursor-pointer`}
+          initial={{ opacity: 0, scale: 0, y: yOffset, x: xOffset }}
+          animate={{
+            opacity: animate ? 0.15 : 0,
+            scale: animate ? 1 : 0,
+            y: animate ? [yOffset, yOffset + 12, yOffset - 8, yOffset] : yOffset,
+            x: animate ? [xOffset, xOffset - 10, xOffset + 6, xOffset] : xOffset
+          }}
+          transition={{
+            duration: 0.6,
+            delay,
+            type: "spring",
+            stiffness: 80,
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+            x: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }
+          }}
+          whileHover={{ scale: 1.25, opacity: 0.4 }}
+        >
+          <div className="size-5 bg-neutral-900/25 backdrop-blur-sm rounded-full flex items-center justify-center border border-neutral-800/25 shadow-lg shadow-neutral-950/15 relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-neutral-700/0 to-neutral-600/0"
+              whileHover={{
+                background: [
+                  "linear-gradient(135deg, rgba(115, 115, 115, 0) 0%, rgba(82, 82, 82, 0) 100%)",
+                  "linear-gradient(135deg, rgba(115, 115, 115, 0.06) 0%, rgba(82, 82, 82, 0.03) 100%)",
+                ]
+              }}
+              transition={{ duration: 0.25 }}
+            />
+            <Icon className="size-2.5 text-neutral-700 group-hover:text-neutral-500 transition-colors duration-300 relative z-10" strokeWidth={1.5} />
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 }

@@ -18,5 +18,30 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "aceternity": {
+      "url": "https://cdn.jsdelivr.net/npm/aceternity@latest/components.json",
+      "name": "Aceternity"
+    },
+    "alchemy": {
+      "url": "https://cdn.jsdelivr.net/npm/alchemy@latest/components.json",
+      "name": "Alchemy"
+    },
+    "origin": {
+      "url": "https://cdn.jsdelivr.net/npm/origin@latest/components.json",
+      "name": "Origin"
+    },
+    "radix": {
+      "url": "https://cdn.jsdelivr.net/npm/radix@latest/components.json",
+      "name": "Radix"
+    },
+    "shadcn": {
+      "url": "https://cdn.jsdelivr.net/npm/shadcn@latest/components.json",
+      "name": "Shadcn"
+    },
+    "ui.shadcn": {
+      "url": "https://cdn.jsdelivr.net/npm/ui.shadcn@latest/components.json",
+      "name": "UI Shadcn"
+    }
+  }
 }

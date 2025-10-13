@@ -1,0 +1,22 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Implement Copy to Clipboard Feature",
+        "description": "Add a copy button to chat messages that allows users to copy message content to their clipboard with visual feedback.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "medium",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-10-13T10:42:47.190Z",
+      "description": "Default tasks context",
+      "updated": "2025-10-13T10:42:47.190Z"
+    }
+  }
+}

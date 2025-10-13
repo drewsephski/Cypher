@@ -428,6 +428,15 @@
     @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
 
+  /* Interactive element utilities for consistent cursor and hover behavior */
+  .interactive {
+    @apply cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .link-interactive {
+    @apply cursor-pointer transition-colors duration-200 hover:text-primary;
+  }
+
   .text-responsive {
     @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
   }

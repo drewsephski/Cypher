@@ -1,0 +1,24 @@
+# Copy to Clipboard Feature
+
+## Overview
+Add a "Copy to Clipboard" button to each chat message that allows users to easily copy message content.
+
+## Requirements
+- Add a copy button to each chat message
+- Show visual feedback when text is copied
+- Support both mouse and keyboard navigation
+- Ensure accessibility (a11y) compliance
+- Include unit tests
+
+## Technical Details
+- Use the Clipboard API for copying text
+- Add a small animation for feedback
+- Ensure proper ARIA labels for accessibility
+- Add tests using React Testing Library
+
+## Acceptance Criteria
+- [ ] Clicking the copy button copies the message text
+- [ ] Visual feedback is shown when text is copied
+- [ ] Button is accessible via keyboard
+- [ ] Screen readers announce the copy action
+- [ ] Unit tests cover all functionality

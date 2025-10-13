@@ -17,16 +17,19 @@ const bricolage = Bricolage_Grotesque({
 })
 
 export const metadata: Metadata = {
-  title: 'cypher',
-  description: 'An AI-powered code generation platform',
-  generator: "cypher",
+  title: 'Cypher AI Assistant',
+  description: 'AI-powered React component generator that creates production-ready components',
+  generator: "Cypher AI Assistant",
   icons: {
     icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/favicon.ico', sizes: 'any' },
-      { url: '/logo.svg', type: 'image/svg+xml' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', type: 'image/png' },
+      { url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' },
+    ],
+    other: [
+      { url: '/logo.svg', type: 'image/svg+xml', rel: 'icon' },
     ],
   },
   manifest: '/site.webmanifest',
@@ -35,23 +38,24 @@ export const metadata: Metadata = {
     { media: '(prefers-color-scheme: dark)', color: '#18181b' },
   ],
   openGraph: {
-    title: 'Agentic Code Studio',
-    description: 'An AI-powered code generation platform',
+    title: 'Cypher AI Assistant',
+    description: 'AI-powered React component generator that creates production-ready components',
     type: 'website',
-    siteName: 'Agentic Code Studio',
+    siteName: 'Cypher AI Assistant',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Agentic Code Studio',
+        alt: 'Cypher AI Assistant - AI-powered React component generator',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Agentic Code Studio',
-    description: 'An AI-powered code generation platform',
+    title: 'Cypher AI Assistant',
+    description: 'AI-powered React component generator that creates production-ready components',
+    images: ['/og-image.png'],
   },
 }
 

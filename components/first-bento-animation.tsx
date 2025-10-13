@@ -41,17 +41,15 @@ function StreamedResponse({ text, start }: { text: string; start: boolean }) {
   }, [text, start]);
 
   return (
-    <div className="relative w-full">
-      <div className="text-[13px] text-neutral-200 leading-relaxed whitespace-pre-wrap font-normal break-words">
-        {displayedText}
-        {start && displayedText.length < text.length && (
-          <motion.span
-            className="inline-block w-0.5 h-4 bg-neutral-300 ml-0.5 rounded-full align-middle"
-            animate={{ opacity: [1, 0.4, 1] }}
-            transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
-      </div>
+    <div className="text-[13px] text-neutral-200 leading-relaxed whitespace-pre-wrap font-normal">
+      {displayedText}
+      {start && displayedText.length < text.length && (
+        <motion.span
+          className="inline-block w-0.5 h-4 bg-neutral-300 ml-0.5 rounded-full"
+          animate={{ opacity: [1, 0.4, 1] }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
     </div>
   );
 }
@@ -65,7 +63,7 @@ export default function FirstBentoAnimation() {
   const [startStream, setStartStream] = useState(false);
 
   const responseText =
-    "Building a minimal product card with refined hover states and dark aesthetics. Includes image, title, pricing, and action button with micro-interactions.";
+    " - Building a minimal product card with refined hover states and dark aesthetics. Includes image, title, pricing, and action button with micro-interactions.";
 
   useEffect(() => {
     if (!isInView) return;

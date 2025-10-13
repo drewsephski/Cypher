@@ -1,7 +1,7 @@
 # Project Context
 
 ## Purpose
-**a0** (pronounced "a-zero") is an AI-powered React component generator that creates production-ready components by analyzing API documentation in real-time. Built with **Next.js 15**, **AI SDK v5**, **Google Gemini 2.5 Flash**, and **Origin UI**.
+**cypher** is an AI-powered React component generator that creates production-ready components by analyzing API documentation in real-time. Built with **Next.js 15**, **AI SDK v5**, **Google Gemini 2.5 Flash**, and **Origin UI**.
 
 ### Key Goals
 - Enable developers to generate production-ready React components through natural language descriptions

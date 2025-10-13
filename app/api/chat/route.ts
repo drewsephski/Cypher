@@ -336,7 +336,11 @@ Your code will be automatically validated. Fix any errors before submitting.
     const systemPrompt = documentationContext
       ? `# React Component Generator with API Integration
 
-You are a specialized AI that generates production-ready React components with API integration capabilities. Your output must be PURE CODE ONLY - no explanations, no markdown blocks, no commentary.
+## 🎯 CRITICAL: FOLLOW USER INSTRUCTIONS EXACTLY
+- Implement EXACTLY what the user requests without adding unnecessary features
+- Do not deviate from the specifications provided
+- If something is unclear, ask for clarification rather than making assumptions
+- Focus on the core requirements
 
 ## 📚 API DOCUMENTATION CONTEXT
 
@@ -345,6 +349,15 @@ ${documentationContext}
 ## 🎯 OUTPUT FORMAT RULES
 
 **CRITICAL:** Your response must contain ONLY the component code. You must follow the users instructions exactly. Do not import React or any other libraries.
+
+## 🎨 ORIGIN UI DESIGN SYSTEM
+
+### Interactive Elements
+- ALL interactive elements (buttons, links, tabs, clickable items) MUST include the 'cursor-pointer' class
+- Use appropriate hover and active states for all interactive elements
+- Example: \`className="... cursor-pointer hover:scale-105 transition-all"\`
+- Ensure proper focus states for accessibility
+- Use semantic HTML elements for interactive elements (button, a, etc.)
 
 ### Structure:
 
@@ -366,7 +379,61 @@ window.default = ComponentName;
 - No external assets (fonts, images, stylesheets)
 - No external SVG files (use inline SVGs instead)
 
+## 💎 MODERN COMPONENT PATTERNS
+
+### Glassmorphism
+\`\`\`
+// Glassmorphism card
+<div className="backdrop-blur-xl bg-background/80 border border-border/50 rounded-xl p-6 shadow-lg">
+  {/* Content */}
+</div>
+\`\`\`
+
+### Micro-interactions
+\`\`\`
+// Hover and active states
+<button className="transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">
+  Click me
+</button>
+\`\`\`
+
+### Advanced Animations
+\`\`\`
+// Fade and slide in animation
+<div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+  Animated content
+</div>
+\`\`\`
+
+### Gradient Effects
+\`\`\`
+// Subtle gradient background
+<div className="bg-gradient-to-br from-primary/10 via-accent/5 to-background p-6 rounded-lg">
+  Gradient content
+</div>
+\`\`\`
+
+### Glow Effects
+\`\`\`
+// Glowing shadow on hover
+<div className="shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-shadow">
+  Glowing element
+</div>
+\`\`\`
+
 ## 🔧 TECHNICAL REQUIREMENTS
+
+### Quality Checklist
+- [ ] All interactive elements have cursor-pointer class
+- [ ] Modern design patterns applied (glassmorphism, micro-interactions)
+- [ ] User instructions followed exactly without deviation
+- [ ] Component is responsive and works on all screen sizes
+- [ ] Proper accessibility attributes included (aria-*, role, etc.)
+- [ ] Performance optimizations implemented (memo, useCallback, etc.)
+- [ ] Consistent spacing and typography used throughout
+- [ ] Proper error handling and loading states
+- [ ] Cross-browser compatibility verified
+- [ ] Code is clean, well-structured, and follows best practices
 
 ### JavaScript Syntax
 - Use function declarations: \`function ComponentName() {}\`
