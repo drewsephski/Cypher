@@ -1,4 +1,4 @@
-# a0 - AI Component Studio
+# Code Cypher - AI Component Studio
 
 ## Overview
 
